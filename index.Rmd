@@ -12,6 +12,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+![](/Users/charlotteuden/Desktop/IMG_1084.JPG)
+
 # Homework 1
 
 * [Bio 381 Repository Homepage](https://github.com/charliuden)
