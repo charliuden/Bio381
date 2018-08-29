@@ -1,0 +1,15 @@
+---
+title: "Homework#1"
+author: "Charlotte Uden"
+date: "August 29, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# My Homework
+
+* [Homework 1](link to homework)
+* [Wikipedia](www.wikipedia.com)
