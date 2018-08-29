@@ -12,8 +12,13 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# My Homework
+# Homework 1
 
-* [Homework 1](https://charliuden.github.io/Bio381/)
+* [Bio 381 Repository Homepage](https://github.com/charliuden)
+
+## Interesting fact about myself: I went to highchool in Tokyo -I'm embarrassed to say I do not speak Japanese.
+
+
+
 
 
