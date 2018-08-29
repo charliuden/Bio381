@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 * [Bio 381 Repository Homepage](https://github.com/charliuden)
 
-## Interesting fact about myself: I went to highchool in Tokyo -I'm embarrassed to say I do not speak Japanese.
+## Interesting fact about myself: My two sisters and I all go by the male versions of our names: Alex, Harri and Charlie
 
 
 
