@@ -1,0 +1,67 @@
+---
+title: 'Lab #3: Centaurea'
+output:
+  beamer_presentation:
+    colortheme: crane
+    fonttheme: structurebold
+    theme: Berlin
+  slidy_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Presentation Goals
+
+The primary goal of this presentation is to learn how to make a presentation in \ LaTex. I have chosen the life history of Centaurea as my subject becasue I will be working with this species during the coming term. 
+
+Questions: Will understanding the species' life history help us tackle its invasion? What stage of the Centaurea (an invasive plant species) life cycle is most vulnerable to biological control?  
+
+
+## Stages in the Life Cycle of Centaurea
+
+- \color{green} seed
+-  jeuvenile
+-  vegetative
+-  flowering
+
+##Stage-based life cycle diagram
+
+ \begin{picture}(320,250)
+ \put(50,10){\includegraphics[height=8cm]{Lab2_centaurea_lifecycle.png}}
+ \put(50,50){\begin{minipage}[t]{1\linewidth}
+ \end{minipage}}
+ \end{picture}
+
+
+## Data Collection:
+
+>- number that graduated to next life cycle
+>- number that stayed in same stage of life cycle
+>- number that reverted back to previous stayce
+>- number that died
+
+>- From this data, transitions from stage to stage will be calculated. 
+
+##Image with caption
+
+\begin{picture}(320,250)
+ \put(50,90){\includegraphics[height=5cm]{maidenHairFern.jpg}}
+ \put(00,70){\begin{minipage}[t]{1\linewidth}
+ {Since I have never taken my own picture of Cenraurea, here is a picture I took of my favorite fern in Vermont: \textit{Adiantum} or Maidenhair Fern}
+ \end{minipage}}
+ \end{picture}
+
+
+##Image with caption overlaid
+
+ \begin{picture}(320,250)
+ \put(30,60){\includegraphics[height=6.5cm]{tsugaCanadensis.jpg}}
+ \put(70,100){\begin{minipage}[t]{0.4\linewidth}
+  {\small\color{white}\textit{Tsuga canadensis} or Eastern hemlock (my favorite tree)}
+ \end{minipage}}
+ \end{picture}
+
+
+

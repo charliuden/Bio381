@@ -14,13 +14,42 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ![](/Users/charlotteuden/Desktop/IMG_1084.JPG)
 
-# Homework 1
+# Homework 1:
 
 * [Bio 381 Repository Homepage](https://github.com/charliuden)
 
 ## Interesting fact about myself: My two sisters and I all go by the male versions of our names: Alex, Harri and Charlie
 
+# Homework 2:
+
+##Typora & Thinking on Paper
+
+This term I will be working with Jane Molofsky from the Plant Biology department. As we have only met once about the project, I only have a novice understanding. Having said that, organising my thoughts on paper and using typora is a good place to start.
+
+###What is the big question being asked?   
+What stage of the Centaura (an invasive plant species) is most vulnerable to biological control?    
+
+###What are specific hypothese and mechanisms being explored?   
+The hypothesis here is that biological control will be most evvective when the probability of survival is lowest. SO, what is the probability that the plant will make it to the next stage of its life cycle? The following data is being collected in the field each year:   
+1. number of individuals that survive to the next stage in the life cycle    
+2. number of individuals that stay in the same state   
+3. number of individuals that die   
+It will be my job to figure out the probability of surviving to the next generation.    
+
+###How will these results be interpreted?      
+Low probabilities indicate a vulnerable stage of the Centauea life cycle.   
+
+Below is a flow chart I made (using Typora) to get a clearer understanding of how Centaurea progresses through each stage of its life.   
+
+![](/Users/charlotteuden/Desktop/First_Term/COMP_BIO/Bio381/Lab2_centaurea_lifecycle.png)
 
 
+I also drew a sketch on paper of how the data may be organised. Here is a picture of it:   
+
+![](/Users/charlotteuden/Desktop/First_Term/COMP_BIO/Bio381/IMG_1453.JPG)
+
+#Homework #3
+
+[Here is the beamer presentation I created](Homework_3.pdf)
 
 
