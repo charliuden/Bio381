@@ -1,0 +1,193 @@
+---
+title: 'Homeworrk #11'
+author: "cuden"
+date: "11/7/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For this final lab exerise, use your newly-developed ggplot chops to create some nice graphs from your own data (If you do not have a good data frame to use for graphics, use one of the many built-in data frames from R (other than mpg, which we are using in class)). Experiment with different themes, theme base sizes, aesthetics, mappings, and faceting. When you are finished, try exporting them to high quality pdfs, jpgs, eps files, or other formats that you would use for submission to a journal.
+
+In this exercise, I encourage you to improve your graphics with elements that we have not (yet) covered in ggplot. For example, can you change the labels on a facet plot so that they are more informative than the variable names that are supplied from your data frame? Can you figure out how to add text annotations, lines and arrows to your graph? Can you figure out how to use custom colors that you have chosen for your fills and lines? Your resources for these explorations are google, Stack Overflow – and Lauren!
+
+###Installing patchwork:
+
+```{r setup, echo=TRUE}
+#install.packages("devtools")
+#devtools::install_github("thomasp85/patchwork")
+#install.packages("patchwork")
+library(patchwork)
+library(ggplot2)
+
+#example:
+#p1 <- qplot(mtcars$mpg, mtcars$disp)
+#p2 <- qplot(mtcars$mpg, mtcars$wt)
+#p1 + p2 # Error: Don't know how to add p2 to a plot (if patchwork is not installed) 
+
+# installing packages for viridis and desaturating
+#install.packages("colorspace", repos = "http://R-Forge.R-project.org")
+#devtools::install_github("wilkelab/cowplot")
+#devtools::install_github("clauswilke/colorblindr")
+library(colorblindr) 
+library(colorspace)
+library(cowplot)
+
+# testing viridis
+#fig <- ggplot(iris, aes(Sepal.Length, fill = Species)) + geom_density(alpha = 0.7)
+#fig
+```
+
+###My Data:
+
+For today's assignment I will be using data on stage transitions of centaurea (knapweed). Each row is a population of centaurea. Eventually, I will use this data to build population matrices, but right now I am just going to use ggplot to plot to peek at the data. 
+
+Variables:
+g = germination rate (September - July)
+ss = seed survival (s-s) (Sept - July)
+ssj = survival of newly-germinated seedlings within first year (s-j)
+sjv = survival (maturation) of established seedlings to vegetative juveniles (j-v)
+sv = survival of vegetative juveniles (v-v)
+sf = survival of adult flowering plants (f-f)
+mjf = maturation, seedlings to flowering plants (j-f); probably unlikely
+mvf = maturation, vegetative juveniles to flowering plants (v-f)
+f = per capita fecundity (viable seeds)n
+
+```{r, echo=TRUE}
+C <- read.table("CentaureaVitalRates.csv",header=TRUE,sep=",", stringsAsFactors=FALSE)
+#take out NA's 
+cleanC <- C[complete.cases(C[1:10]),]
+```
+
+To start, I found a significant relationshipt between species and survival of adult flowering plants (sf):
+
+```{r, echo=TRUE}
+head(cleanC)
+ANOmodel <- aov(sf~Species, data=cleanC)
+summary(ANOmodel)
+```
+
+###Plot 1:
+
+So, let's plot this relationship: population loaction (Location) and survival of adult flowering plants (sf).
+
+```{r, echo=TRUE}
+p1 <- ggplot(data=cleanC, 
+             aes(x=Species, y=sf, 
+                 fill= I("greenyellow"))) +
+  labs(title="Adult survival rate of two species of knapweed", 
+       y="Survival rate of flowering adults", 
+       x="Species") +
+  geom_boxplot()
+print(p1)
+```
+
+###Plot 2:
+
+Another variable that may be related to survival is location. This also shows a significant relationship with survival. Again, I am going make a box plot so we can "see" it. 
+
+```{r, echo=TRUE}
+ANOmodel <- aov(sf~Location, data=cleanC)
+summary(ANOmodel)
+
+p2 <- ggplot(data=cleanC, 
+             aes(x=Location, y=sf, 
+                 fill= I("greenyellow"))) +
+  labs(title="Adult knapweed survival rates across locations in New York State", 
+       y="Survival rate of flowering adults", 
+       x="Location") +
+  geom_boxplot()
+print(p2)
+```
+
+###Plot 3
+
+I am going to try combining all of this information onto one plot:  location x survival with species in color. 
+
+```{r, echo=TRUE}
+p3 <- ggplot(data=cleanC,
+             mapping=aes(x=Location, y=sf, fill=Species)) +
+  labs(title="Survival rates of knapweed across locations in New York", 
+       y="Survival rate of flowering adults", 
+       x="Location") +
+  geom_boxplot()
+print(p3)
+```
+
+
+###Plots 4 and 5
+
+Plot 3 makes me realise that both species weren't collected at every site (someone else collected the data, I have just been asked to build the matrices). So, you cannot conclude that meadow knapweed has higher survival rates than spotted knapweed, becuase location may be affecting 
+
+plotting all locations and species on one graph doesn't make sense -you can't conclude anything about the environmental versus genetic componenets of survival. 
+
+
+
+Instead, we need to look at variation in survival rates within species, at different locations. I'm going to use patchwork to put them together... because I can.
+
+```{r, echo=TRUE}
+p4 <- ggplot(data=cleanC,
+             mapping=aes(x=Location, y=sf, fill= I("greenyellow"))) +
+  labs(title="Meadow Knapweed", 
+       y="Survival rate of flowering adults", 
+       x="Location") +
+  geom_boxplot(data=cleanC[cleanC$Species=="Meadow",])
+print(p4)
+
+p5 <- ggplot(data=cleanC,
+             mapping=aes(x=Location, y=sf, fill= I("greenyellow"))) +
+  labs(title="Spotted Knapweed", 
+       y=NULL, 
+       x=NULL) +
+  geom_boxplot(data=cleanC[cleanC$Species=="Spotted",])
+print(p5)
+
+p4 + p5
+```
+
+Or, I could use the facet funciton:
+
+```{r, echo=TRUE}
+p6 <- ggplot(data=cleanC, 
+             mapping=aes(x=Location, y=sf, fill=Species)) +
+    labs(title="Survival rates of 2 species of knapweed in different locations", 
+       y="Survival rate of flowering adults", 
+       x="Location") +
+  geom_boxplot() +
+  facet_grid(Species~.)
+print(p6) 
+```
+
+Again, becuase both species weren't measured at each locaion, plotting the data this way is less helpful than having separate plots for each species. So, I'm going to focus on making plots 4 and 5 look pretty. 
+```{r, echo=TRUE}
+p1 <- p1 + theme_solarized(base_size=7, base_family="Courier")
+print(p1)
+p2 <- p2 + theme_solarized(base_size=7, base_family="Courier") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+p3 <- p3 + theme_solarized(base_size=7, base_family="Courier")  + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+print (p3)
+p4 <- p4 + theme_solarized(base_size=7, base_family="Courier") 
+p5 <- p5 + theme_solarized(base_size=7, base_family="Courier")
+
+(p1 | p2 | p4)/p5
+(p1 | p2)/(p4 | p5)
+
+p4 | p5 + {
+  p3
+} + plot_layout(ncol=1)
+
+p4 + p5
+
+p5 + p4 + plot_layout(ncol=2, widths=c(3,4))
+```
+
+From plots 4 and 5, I would predict that 
+
+
+
+```{r, echo=TRUE}
+
+
+```
+

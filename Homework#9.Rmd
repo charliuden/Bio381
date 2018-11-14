@@ -1,0 +1,129 @@
+---
+title: "Homework#9"
+author: "cuden"
+date: "10/24/2018"
+output: html_document
+---
+
+#Looping Structures
+
+1.Using a for or while loop, write a function to calculate the number of zeroes in a numeric vector.
+
+```{r setup, include=FALSE}
+library(plyr)
+z <- rep(0,100)
+x <- c(0,3,5,2,6,0,0)
+list <- vector("numeric", length = 0)
+y<-0
+for(i in seq_along(x)) {
+  if(x[i]==0){
+  y <- y+1 #resaves y and then uses y for the next loop
+  }
+}
+y
+list
+zeroes
+
+
+head(zeroes)
+length(zeroes)
+####################
+# FUNCTION: countZeroes
+# INPUTS: numeric vector
+# OUTPUTS: the number of zeroes in the vector
+#------------------------------
+countZeroes <- function(vector=rep(0,100)) {
+  emptyVector <- vector("numeric", length = 0) #make an empty vector
+  for(i in seq_along(vector)) {
+  if(vector[i]!=0) next
+  zeroes <- c(emptyVector, vector[i])
+  }
+  count <- length(zeroes)
+  return(count)
+}
+#------------------------------
+countZeroes()
+countZeroes(vector=z)
+countZeroes(vector=x)
+#NOT WORKING
+```
+
+2. Use subsetting instead of a loop to rewrite the function as a single line of code.
+
+```{r setup, include=FALSE}
+x <- c(3,2,0)
+x
+0 %in% x
+
+####################
+# FUNCTION:countZeroes2
+# INPUTS: numeric vector 
+# OUTPUTS: the number of zeroes in the vector
+#------------------------------
+countZeroes2 <- function(vector=rep(0,10)) {
+  zeroes <- vector[vector=0]
+  count <- length(zeroes)
+  return(count)
+}
+#------------------------------
+countZeroes2()
+#NOT WORKING
+```
+
+
+3. Write a function that takes as input a numeric vector, and returns as output the maximum difference between all possible pairs of elements. Be careful to ensure that your function works properly with both negative and positive numbers. For your first version of the function, create a vector that stores all possible pairwise differences and then extracts the maximum value from that list.
+
+```{r setup, include=FALSE}
+x <- c(3,4,5,7,9)
+for(i in seq_along(x)) {
+  diff(x[i],
+
+####################
+# FUNCTION: maxValue
+# INPUTS: numeric vector
+# OUTPUTS: maximum difference between all possible pairs of elements in vector
+#------------------------------
+maxValue <- function(vector=runif(10)) {
+  for(i in seq_along(vector)) {
+    
+  
+  return()
+
+#------------------------------
+```
+
+4. Now modify the output of (3) to yield a list with 3 elements. The first list item is the pair of vector values that are the maximum distance apart, the second list item is the pair of numbers representing the position of these elements in the vector, and the third list item is the maximum distance calculated from this pair.
+
+5. For a second version of (3), store only a temp variable that keeps track of each difference and then retains only the largest difference as it cycles through the pairwise differences.
+
+6. Write a function that takes as input two matrices, and then multiplies them together, using the rules of matrix multiplication. Your function should return a warning if the input matrices are not of the correct dimensions for matrix multiplication. Check the performance of your function by comparing with the built in R function for matrix multiplication %*%.
+
+```{r setup, include=FALSE}
+x <- matrix(data=1:20, nrow=2)
+y <- matrix(data=21:40, nrow=4)
+z <- matrix(data=41:60, nrow=2)
+if(ncol(x)==ncol(y)&nrow(x)==nrow(y)) x*y else "WRONG!!!!"
+
+####################
+# FUNCTION: matrixMult
+# INPUTS: two matrices of same dimensions
+# OUTPUTS: the product 
+#------------------------------
+matrixMult <- function(matrix1=matrix(data=runif(10), nrow=2), matrix2=matrix(data=runif(10), nrow=2)) {
+  answer <- if(ncol(matrix1)==ncol(matrix2)&nrow(matrix1)==nrow(matrix2)) matrix1*matrix2 else "warning: input matrices are not of the correct dimensions for matrix multiplication"
+  return(answer)
+}
+#------------------------------
+matrixMult(matrix1=x,matrix2=y)
+matrixMult(matrix1=x,matrix2=z)
+```
+
+7, Write a function that takes as input two integers representing the number of rows and columns in a matrix. The output is a matrix of these dimensions in which each element is the product of the row number x the column number.
+
+```{r setup, include=FALSE}
+
+```
+
+
+
+

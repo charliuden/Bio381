@@ -1,0 +1,261 @@
+---
+title: "Homework#7"
+author: "cuden"
+date: "10/10/2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+###Go back to your “thinking on paper” exercise, and decide on a pattern that you might expect in your experiment if a specific hypothesis were true.
+
+Since the "thinking on paper" exerciese, my direction with Jane has changed slightly. Now, we are collecting data on flowering Centaurea in a common garden. Date of first flower will be recorded from individuals taken from Norway, Germany, Luxembourg, Switzerland, France and Spain. I don't know much about the species at all, but for today's purpose, I'm going to hypothesise that flowering time is extended the further south you move along the species' range -growing season decreases as you move north. So, the folling order of flowering dates would be predicted for each popualtion: 
+
+Norway: earliest flower
+Germany
+Luxembourg
+Switzerland
+France
+Spain: latest flower
+
+Sinse this is a common garden experiment, variation between flowering times (phenotypic variation) is due to genetic variation, not environmental. If there is no significant variation, then flowing time is dependent on environmental variation. 
+
+
+###To start, simply assume that the data in each of your treatment groups follow a normal distribution. Specify the sample sizes, means, and variances for each group that would be reasonable if your hypothesis were true.
+
+Instead of date of first flower, I'm going to say date since first individual flowered. So, and individual with time 0 was the first one to flower. An individual with time 2 flowered 2 days later. Jane reckons this will take about six weeks of recording. So, I'll split the six weeks into six -most of norway flowers around the first 7 days, most of germany flowers after 14 days, luxerberg's flowers after 21 days and so on. We will start with a sample size of 10 for each treatment. Variance will be 5 for all of them.
+
+### Using the methods we have covered in class, write code to create a random data set that has these attributes. Organize these data into a data frame or tibble with the appropriate structure.
+
+
+```{r,echo=TRUE}
+library(ggplot2)
+library(MASS)
+
+#Data frame construction for ANOVA
+
+nGroup <- 6
+nName <- c("Norway", "Germany", "Luxembourg", "Switzerland", "France", "Spain")
+nSize <- c(10, 10, 10, 10, 10, 10)  #how many samples we will have in each group. "rule of ten:" at lease ten observations for each variable. 
+nMean <- c(7, 14, 21, 28, 35, 42) #mean of each group. this is point at which we can simulate what data set might look like if our hypothesis is true. 
+nSD <- c(5, 5, 5, 5, 5, 5) #standard deviation. variation between a data point and the means of treatments, BUT amount of deviation is assumed to be consistent if hypothesis is true. 
+
+ID <- 1:(sum(nSize)) #generate row in data set for each observation
+
+#start exploration with NORMAL DISTRIBUTION:
+
+Days <- c(rnorm(n=nSize[1], mean=nMean[1], sd=nSD[1]), #this will generate 10 random variates, with a mean of 14 and sd of 5. (all in first column we just generated) then do the same for the second two treatments:
+            rnorm(n=nSize[2], mean=nMean[2], sd=nSD[2]),
+            rnorm(n=nSize[3], mean=nMean[3], sd=nSD[3]),
+            rnorm(n=nSize[4], mean=nMean[4], sd=nSD[4]),
+            rnorm(n=nSize[5], mean=nMean[5], sd=nSD[5]),
+            rnorm(n=nSize[6], mean=nMean[6], sd=nSD[6]))
+Country <- rep(nName, nSize) 
+table(Country)
+#string to gether into data frame:
+ANOdata <- data.frame(ID, Country, Days)
+str(ANOdata)
+head(ANOdata)
+
+```
+
+###Now write code to analyze the data (probably as an ANOVA or regression analysis, but possibly as a logistic regression or contingency table analysis. Write code to generate a useful graph of the data.
+
+```{r, echo=TRUE}
+# Basic ANOVA model in R
+ANOmodel <- aov(Days~Country, data=ANOdata) #"analysis of variance" response is function of (~) predictor
+print(ANOmodel)
+print(summary(ANOmodel))
+
+#I want my countries to be plotted in latitudinal order:
+ANOdata$Country = with(ANOdata, reorder(Country, ID))
+
+ANOPlot <- ggplot(data=ANOdata, 
+                  aes(x=Country, y=Days, 
+                      fill= Country)) +
+  geom_boxplot()
+print(ANOPlot)
+```
+
+###Try running your analysis multiple times to get a feeling for how variable the results are with the same parameters, but different sets of random numbers.
+
+###Now begin adjusting the means of the different groups. Given the sample sizes you have chosen, how small can the differences between the groups be (the “effect size”) for you to still detect a significant pattern (p < 0.05)?
+
+Lets say there isn't a one week gap between first flowers of each country. Instead, lets try 5 days:
+
+```{r,echo=TRUE}
+#Data frame construction for ANOVA
+nGroup <- 6
+nName <- c("Norway", "Germany", "Luxembourg", "Switzerland", "France", "Spain")
+nSize <- c(10, 10, 10, 10, 10, 10) 
+nMean <- c(5, 10, 15, 20, 25, 30) #changed the means from 7 to 5 day intervals.
+nSD <- c(5, 5, 5, 5, 5, 5) 
+ID <- 1:(sum(nSize)) 
+Days <- c(rnorm(n=nSize[1], mean=nMean[1], sd=nSD[1]), 
+            rnorm(n=nSize[2], mean=nMean[2], sd=nSD[2]),
+            rnorm(n=nSize[3], mean=nMean[3], sd=nSD[3]),
+            rnorm(n=nSize[4], mean=nMean[4], sd=nSD[4]),
+            rnorm(n=nSize[5], mean=nMean[5], sd=nSD[5]),
+            rnorm(n=nSize[6], mean=nMean[6], sd=nSD[6]))
+Country <- rep(nName, nSize) 
+table(Country)
+ANOdata <- data.frame(ID, Country, Days)
+str(ANOdata)
+head(ANOdata)
+# Basic ANOVA model in R
+ANOmodel <- aov(Days~Country, data=ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+ANOdata$Country = with(ANOdata, reorder(Country, ID))
+ANOPlot <- ggplot(data=ANOdata, 
+                  aes(x=Country, y=Days, 
+                      fill= Country)) +
+  geom_boxplot()
+print(ANOPlot)
+
+```
+
+-this still shows a significant pattern. Lets try a mean difference of 2 days.
+
+```{r,echo=TRUE}
+#Data frame construction for ANOVA
+nGroup <- 6
+nName <- c("Norway", "Germany", "Luxembourg", "Switzerland", "France", "Spain")
+nSize <- c(10, 10, 10, 10, 10, 10) 
+nMean <- c(2, 4, 6, 8, 10, 12) # change mean flowering time to 2 day difference
+nSD <- c(5, 5, 5, 5, 5, 5) 
+ID <- 1:(sum(nSize)) 
+Days <- c(rnorm(n=nSize[1], mean=nMean[1], sd=nSD[1]), 
+            rnorm(n=nSize[2], mean=nMean[2], sd=nSD[2]),
+            rnorm(n=nSize[3], mean=nMean[3], sd=nSD[3]),
+            rnorm(n=nSize[4], mean=nMean[4], sd=nSD[4]),
+            rnorm(n=nSize[5], mean=nMean[5], sd=nSD[5]),
+            rnorm(n=nSize[6], mean=nMean[6], sd=nSD[6]))
+Country <- rep(nName, nSize) 
+table(Country)
+ANOdata <- data.frame(ID, Country, Days)
+str(ANOdata)
+head(ANOdata)
+# Basic ANOVA model in R
+ANOmodel <- aov(Days~Country, data=ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+ANOdata$Country = with(ANOdata, reorder(Country, ID))
+ANOPlot <- ggplot(data=ANOdata, 
+                  aes(x=Country, y=Days, 
+                      fill= Country)) +
+  geom_boxplot()
+print(ANOPlot)
+```
+
+-After running the code 32 times, a non significant relationship between country of origina and flowering time was found. So, lets try adding one day to the mean. 
+
+```{r,echo=TRUE}
+#Data frame construction for ANOVA
+nGroup <- 6
+
+nName <- c("Norway", "Germany", "Luxembourg", "Switzerland", "France", "Spain")
+
+
+nSize <- c(10, 10, 10, 10, 10, 10) 
+nMean <- c(3, 6, 9, 12, 15, 18) # change mean flowering time to 3 day difference
+nSD <- c(5, 5, 5, 5, 5, 5) 
+ID <- 1:(sum(nSize)) 
+Days <- c(rnorm(n=nSize[1], mean=nMean[1], sd=nSD[1]), 
+            rnorm(n=nSize[2], mean=nMean[2], sd=nSD[2]),
+            rnorm(n=nSize[3], mean=nMean[3], sd=nSD[3]),
+            rnorm(n=nSize[4], mean=nMean[4], sd=nSD[4]),
+            rnorm(n=nSize[5], mean=nMean[5], sd=nSD[5]),
+            rnorm(n=nSize[6], mean=nMean[6], sd=nSD[6]))
+Country <- rep(nName, nSize) 
+table(Country)
+ANOdata <- data.frame(ID, Country, Days)
+str(ANOdata)
+head(ANOdata)
+# Basic ANOVA model in R
+ANOmodel <- aov(Days~Country, data=ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+ANOdata$Country = with(ANOdata, reorder(Country, ID))
+ANOPlot <- ggplot(data=ANOdata, 
+                  aes(x=Country, y=Days, 
+                      fill= Country)) +
+  geom_boxplot()
+print(ANOPlot)
+```
+There seems to be a consistent pattern of significance, even after running the code many times. So, I would not conclude that there is a signficant relationship between country and flowering time unless the differene between means is at least 3 days. 
+
+
+###Alternatively, for the effect sizes you originally hypothesized, what is the minimum sample size you would need in order to detect a statistically significant effect? Again, run the model a few times with the same parameter set to get a feeling for the effect of random variation in the data.
+
+I'll start by halving the sample size:
+
+```{r,echo=TRUE}
+#Data frame construction for ANOVA
+nGroup <- 6
+nName <- c("Norway", "Germany", "Luxembourg", "Switzerland", "France", "Spain")
+nSize <- c(5, 5, 5, 5, 5, 5) #changed smaple size form 10 to 5 plants per country.
+nMean <- c(3, 6, 9, 12, 15, 18) 
+nSD <- c(5, 5, 5, 5, 5, 5) 
+ID <- 1:(sum(nSize)) 
+Days <- c(rnorm(n=nSize[1], mean=nMean[1], sd=nSD[1]), 
+            rnorm(n=nSize[2], mean=nMean[2], sd=nSD[2]),
+            rnorm(n=nSize[3], mean=nMean[3], sd=nSD[3]),
+            rnorm(n=nSize[4], mean=nMean[4], sd=nSD[4]),
+            rnorm(n=nSize[5], mean=nMean[5], sd=nSD[5]),
+            rnorm(n=nSize[6], mean=nMean[6], sd=nSD[6]))
+Country <- rep(nName, nSize) 
+table(Country)
+ANOdata <- data.frame(ID, Country, Days)
+str(ANOdata)
+head(ANOdata)
+# Basic ANOVA model in R
+ANOmodel <- aov(Days~Country, data=ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+ANOdata$Country = with(ANOdata, reorder(Country, ID))
+ANOPlot <- ggplot(data=ANOdata, 
+                  aes(x=Country, y=Days, 
+                      fill= Country)) +
+  geom_boxplot()
+print(ANOPlot)
+```
+
+Halving the sample size inconsistently showed a p values of less than 0.05. I'll try a sample size of 6.
+
+```{r,echo=TRUE}
+#Data frame construction for ANOVA
+nGroup <- 6
+nName <- c("Norway", "Germany", "Luxembourg", "Switzerland", "France", "Spain")
+nSize <- c(6, 6, 6, 6, 6, 6) #changed smaple size form 10 to 5 plants per country.
+nMean <- c(3, 6, 9, 12, 15, 18) 
+nSD <- c(5, 5, 5, 5, 5, 5) 
+ID <- 1:(sum(nSize)) 
+Days <- c(rnorm(n=nSize[1], mean=nMean[1], sd=nSD[1]), 
+            rnorm(n=nSize[2], mean=nMean[2], sd=nSD[2]),
+            rnorm(n=nSize[3], mean=nMean[3], sd=nSD[3]),
+            rnorm(n=nSize[4], mean=nMean[4], sd=nSD[4]),
+            rnorm(n=nSize[5], mean=nMean[5], sd=nSD[5]),
+            rnorm(n=nSize[6], mean=nMean[6], sd=nSD[6]))
+Country <- rep(nName, nSize) 
+table(Country)
+ANOdata <- data.frame(ID, Country, Days)
+str(ANOdata)
+head(ANOdata)
+# Basic ANOVA model in R
+ANOmodel <- aov(Days~Country, data=ANOdata)
+print(ANOmodel)
+print(summary(ANOmodel))
+ANOdata$Country = with(ANOdata, reorder(Country, ID))
+ANOPlot <- ggplot(data=ANOdata, 
+                  aes(x=Country, y=Days, 
+                      fill= Country)) +
+  geom_boxplot()
+print(ANOPlot)
+```
+
+After multiple runs of the code, the p value remains below 0.05. Therefore, the minimum sample size I would need in order to detect a statistically significant effect is 6. 
+
+Conclusion:
+Base on this exercise, I would only accept my p value if there is a sample size of no less than 6 centaurea plants per region and a diffference of no less than 3 days between each mean. 

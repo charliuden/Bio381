@@ -1,33 +1,14 @@
 ---
-title: "Homework"
-author: "Charlotte Uden"
-date: "August 29, 2018"
-output:
-  prettydoc::html_pretty:
-    theme: architect
-    highlight: github
+title: 'Homework #4'
+author: "cuden"
+date: "9/12/2018"
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-![](/Users/charlotteuden/Desktop/IMG_1084.JPG)
-
-# Homework 1:
-
-* [Bio 381 Repository Homepage](https://github.com/charliuden)
-
-## Interesting fact about myself: My two sisters and I all go by the male versions of our names: Alex, Harri and Charlie
-
-# Homework 2:
-
-
-#Homework #3
-
-[Here is the beamer presentation I created](Homework_3.pdf)
-
-#Homework #4
 
 ##1.
 
@@ -197,87 +178,3 @@ Find: (.)(\w+,)(\w{4})(\w+)(,)(\d+.\d,)
 I broke the second word into two: the first four letters (\w{4}) and then the rest of the word (\w+)
 
 Replace: \1_\3\5
-
-#Homework #5
-
-```{r,echo=TRUE}
-#1 
-library(dplyr)
-data(iris)
-glimpse(iris)
-# There are 5 variables and 150 observations in this data set. 
-
-#2
-
-iris1 <- filter(iris, Species %in% c("virginica","versicolor"), Sepal.Length > 6, Sepal.Width > 2.5)
-glimpse(iris1)
-
-# there are 17 observations and 5 variables
-
-#3 
-
-iris2 <- select(iris1, Species, Sepal.Length, Sepal.Width)
-glimpse(iris2)
-# there are 17 observations and 3 variables. 
-
-#4 
-
-iris3 <- arrange(iris2, desc(Sepal.Length))
-head(iris3)
-
-#5 
-
-iris4 <- mutate(iris3, Sepal.Area=Sepal.Length*Sepal.Width)
-glimpse(iris4)
-# there are 17 observations and 4 variables
-
-#6 
-
-iris5 <- summarize(iris4, mean(Sepal.Length), mean(Sepal.Width), number=n())
-print(iris5)
-
-#7 
-
-iris6 <- group_by(iris4, Species)
-iris6 <- summarize(iris6, mean(Sepal.Length), mean(Sepal.Width), number=n())
-print(iris6)
-
-#8
-
-iris %>%
-  filter(Species %in% c("virginica","versicolor"), Sepal.Length > 6, Sepal.Width > 2.5) %>%
-  select(Species, Sepal.Length, Sepal.Width) %>%
-  arrange(desc(Sepal.Length)) %>%
-  mutate(Sepal.Area=Sepal.Length*Sepal.Width) %>%
-  group_by(Species)%>%
-  summarize(mean(Sepal.Length), mean(Sepal.Width), number=n())
-  
-  #cannot use this code (only gives you 25): filter(species==c("virginica","versicolor")
-```
-
-
-#Homework #6
-
-###Long and wide data formats:
-
-Try converting the iris data set into the long format, with a column called “trait” to indicate sepal and petal length and width.
-
-Once you have converted to the long format, calculate the average for each combination of species and trait.
-
-```{r,echo=TRUE}
-library(tidyr)
-head(iris)
-
-irisLong <- iris %>%
-  gather(Sepal.Length:Petal.Width, key="trait", value="response") 
-           
-irisData <- irisLong %>%
-  group_by(trait, Species) %>%
-  summarize(mean=mean(response)) %>%
-  arrange(Species, trait)
-
-print(irisData)
-
-```
-
-

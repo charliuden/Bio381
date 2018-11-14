@@ -1,0 +1,196 @@
+---
+title: 'Homework # 10'
+author: "cuden"
+date: "10/31/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+###1. Using a for loop, write a function to calculate the number of zeroes in a numeric vector. Before entering the loop, set up a counter variable counter <- 0. Inside the loop, add 1 to counter each time you have a zero in the matrix. Finally, use return(counter) for the output.
+
+
+
+```{r, echo=TRUE}
+library(plyr)
+####################
+# FUNCTION: countZeroes
+# INPUTS: numeric vector
+# OUTPUTS: the number of zeroes in the vector
+#------------------------------
+countZeroes <- function(vector=rep(0,100)) {
+  counter <- 0 #make a vector of one 0
+  for(i in seq_along(vector)) {
+    if(vector[i]!=0) next #if the value for i doesn't equal 0, skip it
+      counter <- counter+1 #if it does equal 0, add 1 to 'vector'
+    }
+  return(counter)
+}
+#------------------------------
+countZeroes()
+x <- c(2,6,0,2,5,0)
+countZeroes(x)
+```
+
+###2. Use subsetting instead of a loop to rewrite the function as a single line of code.
+
+```{r, echo=TRUE}
+
+x <- c(3,0,0,0,0,0,0,2,0)
+0 %in% x
+length(x[which(x==0)])
+length(subset(x,x==0))
+
+####################
+# FUNCTION:countZeroes2
+# INPUTS: numeric vector 
+# OUTPUTS: the number of zeroes in the vector
+#------------------------------
+countZeroes2 <- function(vector=rep(0,10)) {
+  zeroes <- length(subset(vector,vector==0))
+  return(zeroes)
+}
+#------------------------------
+countZeroes2()
+countZeroes2(vector=x)
+```
+
+###3. Write a function that takes as input two integers representing the number of rows and columns in a matrix. The output is a matrix of these dimensions in which each element is the product of the row number x the column number.
+
+```{r, echo=TRUE}
+m <- matrix(data=NA, nrow=2, ncol=3)
+for (i in 1:nrow(m)){
+  for(j in 1:ncol(m)){
+    m[j,i] <- m[j,]*m[,i]
+  }
+}
+m <- matrix(data=1:6,nrow=2)
+for (i in 1:nrow(m)){
+  for(j in 1:ncol(m)){
+    m[i,j] <- m[i,]*m[,j]
+  }
+}
+
+####################
+# FUNCTION: rowCol
+# INPUTS: two matrices
+# OUTPUTS: matrix of these dimensions in which each element is the product of the row number x the column number
+#------------------------------
+rowCol <- function(nRow=runif(1:10),nCol=runif(1:10)) {
+  matrix <- matrix(NA, nrow=nRow, ncol=nCol)
+  x <- expand.grid(c=nCol, z=nRow)
+  return(x)
+}
+  
+#------------------------------
+```
+
+###4. Use the code from yesterday’s class to design and conduct a randomization test for some of your own data. You will need to modify the functions that read in the data, calculate the metric, and randomize the data. Once those are set up, the program should run correctly calling your new functions. Also, to make your analysis fully repeatable, make sure you set the random number seed at the beginning (use either set.seed() in base R, or char2seed in the TeachingDemos package
+
+Read in data
+
+```{r, echo=TRUE}
+library(ggplot2)
+library(TeachingDemos)
+
+z <- read.table("CentaureaCapitulatData.csv",header=TRUE,sep=",", stringsAsFactors=FALSE)
+head(z)
+
+# char2seed("Autumn Leaves")
+
+####### ###########################################
+# function: readData
+# read in (or generate) data set for analysis
+# input: file name (or nothing, for this demo)
+# output: 3 column data frame of observed data (ID,x,y)
+#------------------------------------------------- 
+readData <- function(data=NULL){
+  xObs <- data[,9] #9th column contains Brac length
+  yObs <- data[,10] #10th column contains Brac Width
+  dFrame <- data.frame(ID=seq_along(xObs),xObs,yObs)
+  return(dFrame)
+}
+#--------------------------------------------------
+capitula <- readData(data=z)
+head(capitula)
+```
+
+Calculate Metric:
+
+```{r, echo=TRUE}
+##################################################
+# function: getMetric
+# calculate metric for randomization test
+# input: 2-column data frame for regression
+# output: regression slope
+#------------------------------------------------- 
+getMetric <- function(z=NULL) {
+. <- lm(z[,3]~z[,2])
+. <- summary(.)
+. <- .$coefficients[2,1]
+
+slope <- .
+return(z=slope)
+}
+getMetric(z=capitula)
+```
+
+# Creat Randomization:
+
+```{r, echo=TRUE}
+##################################################
+# function: shuffleData
+# randomize data for regression analysis
+# input: 3-column data frame (ID,xVar,yVar)
+# output: 3-column data frame (ID,xVar,yVar), but yVar is a shuffled version of the input yVar
+#------------------------------------------------- 
+shuffleData <- function(z=NULL) {
+  z[,3] <- sample(z[,3]) # use sample function with defaults to reshuffle column. (third column in z will be y variable)
+return(z)
+}
+x <- shuffleData(z=capitula)
+head(capitula)
+head(x)
+```
+
+Calculate P value
+
+```{r, echo=TRUE}
+##################################################
+# function: getPVal
+# calculate p value from simulation
+# input: vector of observed data and vector of simulated data
+# output: lower, upper tail probability values
+#------------------------------------------------- 
+getPVal <- function(z=NULL) {
+                    if(is.null(z)){
+                      z <- list(xObs=runif(1),xSim=runif(1000))}
+                      pLower <- mean(z[[2]]<=z[[1]])
+                      pUpper <- mean(z[[2]]>=z[[1]])
+return(c(pL=pLower,pU=pUpper))
+}
+
+getPVal(z=capitula) #doest work....
+```
+
+Create histogram of observed and simulated metric
+
+```{r, echo=TRUE}
+##################################################
+# function: plotRanTest
+# create ggplot of histogram of simulated values
+# input: list of observed metric and vector of simulated metrics
+# output: saved ggplot graph
+#------------------------------------------------- 
+plotRanTest <- function(z=NULL) {
+                if(is.null(z)){
+                  z <- list(rnorm(1),rnorm(1000)) }
+dF <- data.frame(ID=seq_along(z[[2]]),simX=z[[2]])
+p1 <- ggplot(data=dF,mapping=aes(x=simX))
+p1 + geom_histogram(mapping=aes(fill=I("goldenrod"),color=I("black"))) +
+geom_vline(aes(xintercept=z[[1]],col="blue")) 
+
+}
+```

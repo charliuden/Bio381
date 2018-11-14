@@ -1,0 +1,164 @@
+---
+title: 'Homework #8'
+author: "cuden"
+date: "10/17/2018"
+output: html_document
+---
+
+#Organizing Code With Structured Programming
+
+####Use the code that you worked on in the last exercise, and re-organize it following the principles of structured programming. Do all the work in a single chunk in your R markdown file, just as if you were writing a single R script. Start with all of your annotated functions, preliminary calls, and global variables. The program body should be only a few lines of code that call the appropriate functions and run them in the correct order. Make sure that the output from one function serves as the input to the next. You can either daisy-chain the functions or write separate lines of code to hold elements in temporary variables and pass the along.
+
+In homeowrk 7, I simulated flowering times for centaurea samples from Norway, Germany, Luxembourg, Switzerland, France and Spain. Here, I will simplify my code my breaking it up into four funcitons: 
+
+simData -makes a data frame of categorical x variables and numeric y variables. The number of groups, names of the groups, sample size, mean and standard deviation also need to be fed into the function in the form of vectors. Maybe I'll have a go at making a funciton that makes these vectors for me. 
+
+anovaResults: Using the output form simData, this funciton will give you the results of an ANOVA test.
+
+boxPlot: This fucntion also uses the output from simData. It produces a  box plot. 
+
+####My Functions:
+
+```{r,echo=TRUE}
+####################
+# FUNCTION: simulate data 
+# INPUTS: number of groups, names, sample sizes, means, standard deviation and standard deviation of each group 
+# OUTPUTS: data frame of discrete predictor varables (x) and continuous response variables (y)
+#------------------------------
+simData <- function(numGroups=6, groupNames=c("A", "B", "C", "D", "E", "F"), sampleSize=c(10, 10, 10, 10, 10, 10), mean=c(10, 12, 14, 16, 18, 20), sd=c(2, 2, 2, 2, 2, 2)) {
+  ID <- 1:(sum(sampleSize)) #generate row in data set for each observation
+  y <- c(rnorm(n=sampleSize[1], mean=mean[1], sd=sd[1]), #this will generate specified number (sampleSize) of random variates, with a normal distribution, a specified 'mean' and specified 'sd'. (all in first column we just generated) then do the same for all other treatments:
+            rnorm(n=sampleSize[2], mean=mean[2], sd=sd[2]),
+            rnorm(n=sampleSize[3], mean=mean[3], sd=sd[3]),
+            rnorm(n=sampleSize[4], mean=mean[4], sd=sd[4]),
+         rnorm(n=sampleSize[5], mean=mean[5], sd=sd[5]),
+            rnorm(n=sampleSize[6], mean=mean[6], sd=sd[6]))
+  x <- rep(groupNames, sampleSize)
+  table(x)
+  dataFrame <- data.frame(ID, x, y) #string together into data frame
+return(dataFrame)
+}
+#------------------------------
+simData() #works! The only problem is that this fucntion can only make data frames with 6 variables. How do I make the function smart enough to use numGroups, so that I can change the number of variables I'm working with?
+
+####################
+# FUNCTION: ANOVA test results
+# INPUTS: data frame of independent discrete variables and dependent continuous variables
+# OUTPUTS: results of ANOVA test
+#------------------------------
+anovaResults <- function(tableName=simData()) {
+  ANOmodel <- aov(y~x, data=simData()) # run an anova test of the data frame from simData function
+  results <- summary(ANOmodel)
+  return(results) # spit out the results of the anova test
+}
+#------------------------------
+anovaResults() #works! 
+
+####################
+# FUNCTION: boxPlot
+# INPUTS: data frame created from my simData function
+# OUTPUTS: box plot of data
+#------------------------------
+boxPlot <- function(tableName=simData()) {
+  library(ggplot2)
+  ANOPlot <- ggplot(data=simData(), 
+                  aes(x=x, y=y, 
+                      fill= x)) +
+    geom_boxplot()
+  plot <- print(ANOPlot)
+  return(plot)
+}
+#------------------------------
+boxPlot()
+```
+
+
+####Structured Programming: 
+
+```{r,echo=TRUE}
+#----------------------------------------------
+#Preliminaries
+library(ggplot2)
+# all of my functions are in this file, so I don't need to access them from anywhere else. BUT I could use source(html) to access funcitons on an html I saved in github. 
+#set.seed(100) -only if I were to publish/wanted to replicate data
+#-----------------------------------------------
+# Global Variables
+
+#I need to create vectors to feed into my simData fucntion:
+nNames <- c("Norway", "Germany", "Luxembourg", "Switzerland", "France", "Spain") 
+nSize <- c(10, 10, 10, 10, 10, 10)  
+nMean <- c(7, 14, 21, 28, 35, 42) 
+nSD <- c(5, 5, 5, 5, 5, 5)
+
+#-----------------------------------------------
+# Program body 
+floweringTimes <- simData(numGroup=6,groupNames=nNames,sampleSize=nSize,mean=nMean,sd=nSD)
+results <- anovaResults(tableName=floweringTimes)
+plot <- boxPlot(tableName=floweringTimes)
+
+print(results)
+print(plot)
+
+```
+
+
+####Once your code is up and working, modify your program do something else: record a new summary variable, code a new statistical analysis, or create a different set of random variables or output graph. Do not rewrite any of your existing functions. Instead, copy them, rename them, and then modify them to do new things. Once your new functions are written, add some more lines of program code, calling a mixture of your previous functions and your new functions to get the job done.
+
+###Optional. If time permits and you have the skills, try putting your program inside of a for loop and repeat the analysis with a different stochastic data set (each time you call a function that invokes the random number generator, it will create a new set of data for you to process). Can you create a data structure to store the summary statistics created in each pass through the loop? If not, your program will work, but it will only show the results from the final replicate (the previous results will be written over each time you traverse the loop). > Continue working on exercise from previous week
+
+I want to plot my p values after each re-run of the anovaResults funciton. So first, I need to write a functoin that pulls the p value form the result of my anovaResults function. This gets at question 2 -a slight modification to my original funciton. Then, I need to write a funcion that does that over and over again, and then I need to put them in a table. Maybe plot it?
+
+```{r,echo=TRUE}
+####################
+# FUNCTION: p value from ANOVA test
+# INPUTS: data frame of independent discrete variables and dependent continuous variables
+# OUTPUTS: p value from anova test run on output form simData function. 
+#------------------------------
+pValue <- function(tableName=simData()) {
+  ANOmodel <- aov(y~x, tableName) # run an anova test of the data frame from simData function
+  results <- unlist(summary(ANOmodel)) #unlist results of anova test
+  pValue <- results[9] #9th element in 'result' is the p value
+  return(pValue) 
+}
+#-------------------------------
+pValue() #works!
+
+####################
+# FUNCTION: run a for loop using the pValue funciton
+# INPUTS: p values from pValue()
+# OUTPUTS: vector of p values
+#------------------------------
+repeatedPValue <- function(tableName=simData()) {
+  x <- c(1:100)
+  y <- paste(x,pValue(tableName=tableName),0)
+  return(y)
+}
+#-------------------------------
+repeatedPValue() #works!
+
+#STRUCTURED PROGRAMMING
+
+#----------------------------------------------
+#Preliminaries
+library(ggplot2)
+# all of my functions are in this file, so I don't need to access them from anywhere else. BUT I could use source(html) to access funcitons on an html I saved in github. 
+#set.seed(100) -only if I were to publish/wanted to replicate data
+#-----------------------------------------------
+# Global Variables
+
+# This time, I'm going to make my sample size 3
+nNames <- c("Norway", "Germany", "Luxembourg", "Switzerland", "France", "Spain") 
+nSize <- c(3, 3, 3, 3, 3, 3)  
+nMean <- c(7, 8, 9, 10, 11, 12) 
+nSD <- c(5, 5, 5, 5, 5, 5)
+
+#-----------------------------------------------
+# Program body 
+floweringTimes <- simData(numGroup=6,groupNames=nNames,sampleSize=nSize,mean=nMean,sd=nSD)
+pValue(tableName=floweringTimes)
+z <- repeatedPValue(tableName=floweringTimes)
+head(z)
+qplot(z,
+      geom="histogram")
+hist(z)
+```
