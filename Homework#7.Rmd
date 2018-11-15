@@ -1,12 +1,18 @@
 ---
-title: "Homework#7"
+title: "Homework #7"
 author: "cuden"
 date: "10/10/2018"
 output:
-  pdf_document: default
-  html_document: default
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+![](IMG_1783.JPG)
 
 ###Go back to your “thinking on paper” exercise, and decide on a pattern that you might expect in your experiment if a specific hypothesis were true.
 

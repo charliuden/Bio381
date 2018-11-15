@@ -2,7 +2,10 @@
 title: 'Homework #8'
 author: "cuden"
 date: "10/17/2018"
-output: html_document
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
 ---
 
 #Organizing Code With Structured Programming

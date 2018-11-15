@@ -12,272 +12,33 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-![](/Users/charlotteuden/Desktop/IMG_1084.JPG)
+![](CO_lake.JPG)
 
-# Homework 1:
+* Homework 1: [Bio 381 Repository Homepage](https://github.com/charliuden)
 
-* [Bio 381 Repository Homepage](https://github.com/charliuden)
+Interesting fact about myself: My two sisters and I all go by the male versions of our names: Alex, Harri and Charlie
 
-## Interesting fact about myself: My two sisters and I all go by the male versions of our names: Alex, Harri and Charlie
 
-# Homework 2:
+* [Homework #2](Homework_2.html)
 
 
-#Homework #3
 
-[Here is the beamer presentation I created](Homework_3.pdf)
+* Homework #3: [beamer presentation](Homework_3.pdf)
 
-#Homework #4
+* [Homework #4](Homework_4.html)
 
-##1.
+* [Homework #5](Homework_5.html)
 
-```{r,  echo=TRUE}
-x <- 1.1
-a <- 2.2
-b <- 3.3
-#a
-z <- x^(a^b)
-print(z)
-#b
-z <- (x^a)^b
-print(z)
-#c
-z <- 3*x^3+2*x^2+1
-print(z)
-```
+* [Homework #6](Lab6-Simulating&FittingDataDistributions.html)
 
-##2
+* [Homework #7](Homework_7.html)
 
-```{r, echo=TRUE}
-#a
-z <- seq(from=1, to=8, by=1)
-z <- rep(x=c(z[1:8],z[7:1]))
-print(z)
-#OR
-z <- seq(from=1, to=8, by=1)
-y <- c(z[7:1])
-z <- c(z,y)
-print(z)
+* [Homework #8](Homework_8.html)
 
-#b
-z <- seq(from=1, to=5, by=1)
-z <- rep(x=z, times=z)
-print(z)
+* Homework #9 was added to #10
 
-#c
-z <- seq(from=1, to=5, by=1)
-z <- rep(x=c(z[5:1]), times=c(z[1:5]))
-print(z)
+* [Homework #10](Homework_10.html)
 
-```
-
-##3
-
-```{r, echo=TRUE}
-# Polar coordinates can be written as ordered pair, (r,theta). r is distance form pole to point P. Theta is the angle measured from polar axis to line that passes through pole. 
-
-polarCoord <- runif(2) #make a matrix of two random uniform numbers
-print(polarCoord)
-x <- polarCoord[1] #first number in martix is x
-y <- polarCoord[2] #second number in matrix is y
-
-r <- sqrt(x^2+y^2)
-theta <- atan(x/y)
-
-print(r)
-print(theta)
-
-```
-
-
-##4
-
-```{r,echo=TRUE}
-queue <- c("sheep", "fox", "owl", "ant")
-print(queue)
-
-#a Serpant arrives 
-queue <- c(queue,"serpant")
-print(queue)
-
-#b Sheep enters the ark
-queue <- c(queue[2:5])
-print(queue)
-
-#c Donkey talks his way to the front
-#queue[1] <- "donkey" this replaces the first column with donkey
-queue <- c("donkey",queue) 
-print(queue)
-
-#d The serpant leaves
-queue <- queue[-5]
-print(queue)
-
-#e The owl gets bored and leaves
-queue <- queue[-3]
-print(queue)
-
-#f Ant lets aphid cut the line
-queue <- c(queue[1:2],"aphid",queue[3])
-print(queue)
-
-#g In what postition is the aphid?
-
-#match(c("aphid",queue))
-
-#regexpr("aphid",queue)
-
-#ind("aphid",queue)
-```
-
-
-##5
-
-```{r,echo=TRUE}
-# Use r to create a vector of all integers from 1 to 100 not divisible by 2,3 or 7.
-
-z <- c(1:100)
-z
-
-# which(!z%/%2==0) gives you and index of elements in Z not (!) divisible (%%) by 2. 
-# z[which(!z%/%2==0)] gives you the values in the index. so,
-a <- z[which(!z%/%2==0)]
-b <- z[which(!z%/%3==0)]
-c <- z[which(!z%/%7==0)]
-
-# Use the & operator to combine all logical operations:
-
-d <- z[which(!z%%2==0 & !z%%3==0 & !z%%7==0)]
-
-print(d)
-```
-
-##6
-Find:(\s{2,})
-
-Replace: ,
-
-##7
-
-Find: (\w+)(\W)(\s)(\w+)(\W)(\s)(..*)(\s|\N)
-
-Broke each line into 6 elements:
-1. a word more than one character long
-2. not a character (the comma)
-3. space
-4. word
-5. not character (comma)
-6. space
-7. rest of the line
-8. space OR (|) line break
-
-Replace: \1\3\4\6(\7)\8
- 
-
-##8
-
-Find: (\W)(\w{2})(\d{1})(\s)
-
-Replace:\1\2\3\n
-
-Find:((\d{4})(\s{1})((\w+\s\w+)|(\w+\s\w+\s\w+\s\w+))(\W)(\w{2})(\d{1})
-
-Replace: \3_\1\5\6\7\8  SO CLOSEEE!!!
-
-##9
-
-Find: (.)(\w+,)(\w+,)(\d+.\d,)
-
-(.) indicates "any charactes" -in this case, the first letter of the first word. 
-
-Replace: \1_\2
-
-Find: (.)(\w+,)(\w{4})(\w+)(,)(\d+.\d,)
-
-I broke the second word into two: the first four letters (\w{4}) and then the rest of the word (\w+)
-
-Replace: \1_\3\5
-
-#Homework #5
-
-```{r,echo=TRUE}
-#1 
-library(dplyr)
-data(iris)
-glimpse(iris)
-# There are 5 variables and 150 observations in this data set. 
-
-#2
-
-iris1 <- filter(iris, Species %in% c("virginica","versicolor"), Sepal.Length > 6, Sepal.Width > 2.5)
-glimpse(iris1)
-
-# there are 17 observations and 5 variables
-
-#3 
-
-iris2 <- select(iris1, Species, Sepal.Length, Sepal.Width)
-glimpse(iris2)
-# there are 17 observations and 3 variables. 
-
-#4 
-
-iris3 <- arrange(iris2, desc(Sepal.Length))
-head(iris3)
-
-#5 
-
-iris4 <- mutate(iris3, Sepal.Area=Sepal.Length*Sepal.Width)
-glimpse(iris4)
-# there are 17 observations and 4 variables
-
-#6 
-
-iris5 <- summarize(iris4, mean(Sepal.Length), mean(Sepal.Width), number=n())
-print(iris5)
-
-#7 
-
-iris6 <- group_by(iris4, Species)
-iris6 <- summarize(iris6, mean(Sepal.Length), mean(Sepal.Width), number=n())
-print(iris6)
-
-#8
-
-iris %>%
-  filter(Species %in% c("virginica","versicolor"), Sepal.Length > 6, Sepal.Width > 2.5) %>%
-  select(Species, Sepal.Length, Sepal.Width) %>%
-  arrange(desc(Sepal.Length)) %>%
-  mutate(Sepal.Area=Sepal.Length*Sepal.Width) %>%
-  group_by(Species)%>%
-  summarize(mean(Sepal.Length), mean(Sepal.Width), number=n())
-  
-  #cannot use this code (only gives you 25): filter(species==c("virginica","versicolor")
-```
-
-
-#Homework #6
-
-###Long and wide data formats:
-
-Try converting the iris data set into the long format, with a column called “trait” to indicate sepal and petal length and width.
-
-Once you have converted to the long format, calculate the average for each combination of species and trait.
-
-```{r,echo=TRUE}
-library(tidyr)
-head(iris)
-
-irisLong <- iris %>%
-  gather(Sepal.Length:Petal.Width, key="trait", value="response") 
-           
-irisData <- irisLong %>%
-  group_by(trait, Species) %>%
-  summarize(mean=mean(response)) %>%
-  arrange(Species, trait)
-
-print(irisData)
-
-```
+* [Homework #11](Homework_11.html)
 
 

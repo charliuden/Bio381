@@ -2,7 +2,10 @@
 title: 'Homework #4'
 author: "cuden"
 date: "9/12/2018"
-output: html_document
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
 ---
 
 ```{r setup, include=FALSE}

@@ -2,7 +2,10 @@
 title: 'Homework # 10'
 author: "cuden"
 date: "10/31/2018"
-output: html_document
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
 ---
 
 ```{r setup, include=FALSE}
@@ -37,7 +40,6 @@ countZeroes(x)
 ###2. Use subsetting instead of a loop to rewrite the function as a single line of code.
 
 ```{r, echo=TRUE}
-
 x <- c(3,0,0,0,0,0,0,2,0)
 0 %in% x
 length(x[which(x==0)])
@@ -60,31 +62,34 @@ countZeroes2(vector=x)
 ###3. Write a function that takes as input two integers representing the number of rows and columns in a matrix. The output is a matrix of these dimensions in which each element is the product of the row number x the column number.
 
 ```{r, echo=TRUE}
-m <- matrix(data=NA, nrow=2, ncol=3)
+nRow <- 4
+nCol <- 3
+m <- matrix(data=1:nRow*nCol, nrow=nRow, ncol=nCol)
+m
 for (i in 1:nrow(m)){
   for(j in 1:ncol(m)){
-    m[j,i] <- m[j,]*m[,i]
+    m[i,j] <- i*j 
   }
 }
-m <- matrix(data=1:6,nrow=2)
-for (i in 1:nrow(m)){
-  for(j in 1:ncol(m)){
-    m[i,j] <- m[i,]*m[,j]
-  }
-}
+m
 
 ####################
 # FUNCTION: rowCol
 # INPUTS: two matrices
 # OUTPUTS: matrix of these dimensions in which each element is the product of the row number x the column number
 #------------------------------
-rowCol <- function(nRow=runif(1:10),nCol=runif(1:10)) {
-  matrix <- matrix(NA, nrow=nRow, ncol=nCol)
-  x <- expand.grid(c=nCol, z=nRow)
-  return(x)
-}
-  
+rowCol <- function(nRow=sample.int(10,1),nCol=sample.int(10,1)) {
+  m <- matrix(nrow=nRow, ncol=nCol)
+  for (i in 1:nrow(m)){
+    for(j in 1:ncol(m)){
+      m[i,j] <- i*j
+    }
+    }
+  return(m)
+  }
 #------------------------------
+rowCol()
+rowCol(nRow=2, nCol=3)
 ```
 
 ###4. Use the code from yesterday’s class to design and conduct a randomization test for some of your own data. You will need to modify the functions that read in the data, calculate the metric, and randomize the data. Once those are set up, the program should run correctly calling your new functions. Also, to make your analysis fully repeatable, make sure you set the random number seed at the beginning (use either set.seed() in base R, or char2seed in the TeachingDemos package
@@ -98,7 +103,7 @@ library(TeachingDemos)
 z <- read.table("CentaureaCapitulatData.csv",header=TRUE,sep=",", stringsAsFactors=FALSE)
 head(z)
 
-# char2seed("Autumn Leaves")
+char2seed("Autumn Leaves")
 
 ####### ###########################################
 # function: readData
@@ -137,7 +142,7 @@ return(z=slope)
 getMetric(z=capitula)
 ```
 
-# Creat Randomization:
+Creat Randomization:
 
 ```{r, echo=TRUE}
 ##################################################
@@ -191,6 +196,5 @@ dF <- data.frame(ID=seq_along(z[[2]]),simX=z[[2]])
 p1 <- ggplot(data=dF,mapping=aes(x=simX))
 p1 + geom_histogram(mapping=aes(fill=I("goldenrod"),color=I("black"))) +
 geom_vline(aes(xintercept=z[[1]],col="blue")) 
-
 }
 ```
