@@ -100,9 +100,6 @@ Read in data
 library(ggplot2)
 library(TeachingDemos)
 
-z <- read.table("CentaureaCapitulatData.csv",header=TRUE,sep=",", stringsAsFactors=FALSE)
-head(z)
-
 char2seed("Autumn Leaves")
 
 ####### ###########################################
@@ -118,8 +115,6 @@ readData <- function(data=NULL){
   return(dFrame)
 }
 #--------------------------------------------------
-capitula <- readData(data=z)
-head(capitula)
 ```
 
 Calculate Metric:
@@ -139,7 +134,6 @@ getMetric <- function(z=NULL) {
 slope <- .
 return(z=slope)
 }
-getMetric(z=capitula)
 ```
 
 Creat Randomization:
@@ -155,9 +149,6 @@ shuffleData <- function(z=NULL) {
   z[,3] <- sample(z[,3]) # use sample function with defaults to reshuffle column. (third column in z will be y variable)
 return(z)
 }
-x <- shuffleData(z=capitula)
-head(capitula)
-head(x)
 ```
 
 Calculate P value
@@ -170,14 +161,12 @@ Calculate P value
 # output: lower, upper tail probability values
 #------------------------------------------------- 
 getPVal <- function(z=NULL) {
-                    if(is.null(z)){
-                      z <- list(xObs=runif(1),xSim=runif(1000))}
-                      pLower <- mean(z[[2]]<=z[[1]])
-                      pUpper <- mean(z[[2]]>=z[[1]])
-return(c(pL=pLower,pU=pUpper))
+  if(is.null(z)){
+    z <- list(xObs=runif(1),xSim=runif(1000))}
+  pLower <- mean(z[[2]]<=z[[1]])
+  pUpper <- mean(z[[2]]>=z[[1]])
+  return(c(pL=pLower,pU=pUpper))
 }
-
-getPVal(z=capitula) #doest work....
 ```
 
 Create histogram of observed and simulated metric
@@ -197,4 +186,26 @@ p1 <- ggplot(data=dF,mapping=aes(x=simX))
 p1 + geom_histogram(mapping=aes(fill=I("goldenrod"),color=I("black"))) +
 geom_vline(aes(xintercept=z[[1]],col="blue")) 
 }
+```
+
+Now use funcitons to do the work 
+
+```{r, echo=TRUE}
+C <- read.table("CentaureaCapitulatData.csv",header=TRUE,sep=",", stringsAsFactors=FALSE)
+cleanC <- C[complete.cases(C[1:10]),] #take out NAs
+head(cleanC) 
+
+nSim <- 1000
+xSim <- rep(NA,nSim)
+dF <- readData(cleanC)
+xObs <- getMetric(dF)
+
+for(i in seq_len(nSim)){
+  xSim[i] <- getMetric(shuffleData(dF))
+}
+
+slopes <- list(xObs, xSim)
+head(slopes) #first item in list is value we got from data. rest of data is this original data re-shuffled
+getPVal(slopes)
+plotRanTest(slopes)
 ```

@@ -175,7 +175,8 @@ rowCol &lt;-<span class="st"> </span>function(<span class="dt">nRow=</span><span
 ##  [6,]    6   12   18   24   30   36   42   48
 ##  [7,]    7   14   21   28   35   42   49   56
 ##  [8,]    8   16   24   32   40   48   56   64
-##  [9,]    9   18   27   36   45   54   63   72</code></pre>
+##  [9,]    9   18   27   36   45   54   63   72
+## [10,]   10   20   30   40   50   60   70   80</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rowCol</span>(<span class="dt">nRow=</span><span class="dv">2</span>, <span class="dt">nCol=</span><span class="dv">3</span>)</code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
 ## [1,]    1    2    3
@@ -187,23 +188,7 @@ rowCol &lt;-<span class="st"> </span>function(<span class="dt">nRow=</span><span
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(TeachingDemos)
 
-z &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;CentaureaCapitulatData.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>,<span class="dt">sep=</span><span class="st">&quot;,&quot;</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
-<span class="kw">head</span>(z)</code></pre></div>
-<pre><code>##   Pop IndID Cap Brac_RowNr SerBrac_RowNr Brac_appress Brac_Color
-## 1  CH     3   1          8             0            1          2
-## 2  CH    11   1          6             0            2          2
-## 3  CH    17   1          8             0            1          1
-## 4  CH    17   2          9             0            1          1
-## 5  DF     1   1          7             0            1          2
-## 6  DF    10   1          8             0            1          2
-##   SerBrac_yes_no Brac_Len Brac_Wid BracApCen_Len BracApCen_Wid
-## 1             no   233.65    61.85         71.78         46.84
-## 2             no   171.98   105.22         83.60         53.94
-## 3             no   200.49    82.98         58.55         39.12
-## 4             no   184.88    84.90         51.89         31.78
-## 5             no   214.45    97.42         63.25         37.36
-## 6             no   230.71    81.01         60.01         34.48</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">char2seed</span>(<span class="st">&quot;Autumn Leaves&quot;</span>)
+<span class="kw">char2seed</span>(<span class="st">&quot;Autumn Leaves&quot;</span>)
 
 ####### ###########################################
 <span class="co"># function: readData</span>
@@ -217,16 +202,7 @@ readData &lt;-<span class="st"> </span>function(<span class="dt">data=</span><sp
   dFrame &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">ID=</span><span class="kw">seq_along</span>(xObs),xObs,yObs)
   <span class="kw">return</span>(dFrame)
 }
-<span class="co">#--------------------------------------------------</span>
-capitula &lt;-<span class="st"> </span><span class="kw">readData</span>(<span class="dt">data=</span>z)
-<span class="kw">head</span>(capitula)</code></pre></div>
-<pre><code>##   ID   xObs   yObs
-## 1  1 233.65  61.85
-## 2  2 171.98 105.22
-## 3  3 200.49  82.98
-## 4  4 184.88  84.90
-## 5  5 214.45  97.42
-## 6  6 230.71  81.01</code></pre>
+<span class="co">#--------------------------------------------------</span></code></pre></div>
 <p>Calculate Metric:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">##################################################
 <span class="co"># function: getMetric</span>
@@ -241,9 +217,7 @@ getMetric &lt;-<span class="st"> </span>function(<span class="dt">z=</span><span
 
 slope &lt;-<span class="st"> </span>.
 <span class="kw">return</span>(<span class="dt">z=</span>slope)
-}
-<span class="kw">getMetric</span>(<span class="dt">z=</span>capitula)</code></pre></div>
-<pre><code>## [1] 0.3072678</code></pre>
+}</code></pre></div>
 <p>Creat Randomization:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">##################################################
 <span class="co"># function: shuffleData</span>
@@ -254,24 +228,7 @@ slope &lt;-<span class="st"> </span>.
 shuffleData &lt;-<span class="st"> </span>function(<span class="dt">z=</span><span class="ot">NULL</span>) {
   z[,<span class="dv">3</span>] &lt;-<span class="st"> </span><span class="kw">sample</span>(z[,<span class="dv">3</span>]) <span class="co"># use sample function with defaults to reshuffle column. (third column in z will be y variable)</span>
 <span class="kw">return</span>(z)
-}
-x &lt;-<span class="st"> </span><span class="kw">shuffleData</span>(<span class="dt">z=</span>capitula)
-<span class="kw">head</span>(capitula)</code></pre></div>
-<pre><code>##   ID   xObs   yObs
-## 1  1 233.65  61.85
-## 2  2 171.98 105.22
-## 3  3 200.49  82.98
-## 4  4 184.88  84.90
-## 5  5 214.45  97.42
-## 6  6 230.71  81.01</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(x)</code></pre></div>
-<pre><code>##   ID   xObs   yObs
-## 1  1 233.65 119.57
-## 2  2 171.98  54.93
-## 3  3 200.49  44.01
-## 4  4 184.88  58.31
-## 5  5 214.45  61.03
-## 6  6 230.71  82.99</code></pre>
+}</code></pre></div>
 <p>Calculate P value</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">##################################################
 <span class="co"># function: getPVal</span>
@@ -280,16 +237,12 @@ x &lt;-<span class="st"> </span><span class="kw">shuffleData</span>(<span class=
 <span class="co"># output: lower, upper tail probability values</span>
 <span class="co">#------------------------------------------------- </span>
 getPVal &lt;-<span class="st"> </span>function(<span class="dt">z=</span><span class="ot">NULL</span>) {
-                    if(<span class="kw">is.null</span>(z)){
-                      z &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">xObs=</span><span class="kw">runif</span>(<span class="dv">1</span>),<span class="dt">xSim=</span><span class="kw">runif</span>(<span class="dv">1000</span>))}
-                      pLower &lt;-<span class="st"> </span><span class="kw">mean</span>(z[[<span class="dv">2</span>]]&lt;=z[[<span class="dv">1</span>]])
-                      pUpper &lt;-<span class="st"> </span><span class="kw">mean</span>(z[[<span class="dv">2</span>]]&gt;=z[[<span class="dv">1</span>]])
-<span class="kw">return</span>(<span class="kw">c</span>(<span class="dt">pL=</span>pLower,<span class="dt">pU=</span>pUpper))
-}
-
-<span class="kw">getPVal</span>(<span class="dt">z=</span>capitula) <span class="co">#doest work....</span></code></pre></div>
-<pre><code>## pL pU 
-## NA NA</code></pre>
+  if(<span class="kw">is.null</span>(z)){
+    z &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">xObs=</span><span class="kw">runif</span>(<span class="dv">1</span>),<span class="dt">xSim=</span><span class="kw">runif</span>(<span class="dv">1000</span>))}
+  pLower &lt;-<span class="st"> </span><span class="kw">mean</span>(z[[<span class="dv">2</span>]]&lt;=z[[<span class="dv">1</span>]])
+  pUpper &lt;-<span class="st"> </span><span class="kw">mean</span>(z[[<span class="dv">2</span>]]&gt;=z[[<span class="dv">1</span>]])
+  <span class="kw">return</span>(<span class="kw">c</span>(<span class="dt">pL=</span>pLower,<span class="dt">pU=</span>pUpper))
+}</code></pre></div>
 <p>Create histogram of observed and simulated metric</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">##################################################
 <span class="co"># function: plotRanTest</span>
@@ -305,6 +258,295 @@ p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt"
 p1 +<span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">mapping=</span><span class="kw">aes</span>(<span class="dt">fill=</span><span class="kw">I</span>(<span class="st">&quot;goldenrod&quot;</span>),<span class="dt">color=</span><span class="kw">I</span>(<span class="st">&quot;black&quot;</span>))) +
 <span class="kw">geom_vline</span>(<span class="kw">aes</span>(<span class="dt">xintercept=</span>z[[<span class="dv">1</span>]],<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)) 
 }</code></pre></div>
+<p>Now use funcitons to do the work</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">C &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;CentaureaCapitulatData.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>,<span class="dt">sep=</span><span class="st">&quot;,&quot;</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
+cleanC &lt;-<span class="st"> </span>C[<span class="kw">complete.cases</span>(C[<span class="dv">1</span>:<span class="dv">10</span>]),] <span class="co">#take out NAs</span>
+<span class="kw">head</span>(cleanC) </code></pre></div>
+<pre><code>##   Pop IndID Cap Brac_RowNr SerBrac_RowNr Brac_appress Brac_Color
+## 1  CH     3   1          8             0            1          2
+## 2  CH    11   1          6             0            2          2
+## 3  CH    17   1          8             0            1          1
+## 4  CH    17   2          9             0            1          1
+## 5  DF     1   1          7             0            1          2
+## 6  DF    10   1          8             0            1          2
+##   SerBrac_yes_no Brac_Len Brac_Wid BracApCen_Len BracApCen_Wid
+## 1             no   233.65    61.85         71.78         46.84
+## 2             no   171.98   105.22         83.60         53.94
+## 3             no   200.49    82.98         58.55         39.12
+## 4             no   184.88    84.90         51.89         31.78
+## 5             no   214.45    97.42         63.25         37.36
+## 6             no   230.71    81.01         60.01         34.48</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nSim &lt;-<span class="st"> </span><span class="dv">1000</span>
+xSim &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>,nSim)
+dF &lt;-<span class="st"> </span><span class="kw">readData</span>(cleanC)
+xObs &lt;-<span class="st"> </span><span class="kw">getMetric</span>(dF)
+
+for(i in <span class="kw">seq_len</span>(nSim)){
+  xSim[i] &lt;-<span class="st"> </span><span class="kw">getMetric</span>(<span class="kw">shuffleData</span>(dF))
+}
+
+slopes &lt;-<span class="st"> </span><span class="kw">list</span>(xObs, xSim)
+<span class="kw">head</span>(slopes) <span class="co">#first item in list is value we got from data. rest of data is this original data re-shuffled</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 0.3072678
+## 
+## [[2]]
+##    [1] -2.567970e-03  6.831321e-02 -2.606473e-02 -1.160370e-02
+##    [5]  2.364195e-02 -3.417962e-02 -2.960089e-02  3.744356e-02
+##    [9]  5.266656e-03  2.759742e-02  7.234697e-02 -5.314272e-02
+##   [13]  1.993233e-02  3.670053e-02 -2.532327e-02 -4.301156e-02
+##   [17]  3.699987e-02 -6.057858e-03  1.325848e-01  9.368408e-03
+##   [21] -1.181128e-02  6.244089e-02 -3.063456e-02  6.219334e-02
+##   [25]  8.885974e-02  3.575924e-02 -3.535246e-02 -1.015756e-02
+##   [29]  2.823525e-02 -1.000231e-01  3.347573e-02 -8.452676e-02
+##   [33] -6.580078e-02  4.755333e-02 -3.722157e-02 -4.576752e-02
+##   [37] -6.937630e-02  6.851156e-02  1.252252e-02  1.098898e-01
+##   [41] -3.293318e-02  6.306444e-03 -9.100366e-02 -3.668449e-02
+##   [45]  6.030762e-02  2.356575e-02 -6.238702e-02  2.597385e-02
+##   [49]  4.476711e-02 -5.899740e-03  1.926564e-02  4.405346e-02
+##   [53] -1.207029e-01 -1.241695e-02 -1.006029e-01 -1.562802e-02
+##   [57]  1.967689e-02 -7.557862e-03 -1.666499e-02  2.067337e-02
+##   [61]  7.762906e-02 -2.183525e-02  7.722050e-03  5.521834e-02
+##   [65]  1.207950e-02  5.299348e-02 -4.768825e-02 -7.361359e-02
+##   [69] -3.164455e-02  7.133305e-02  1.106354e-02  9.525579e-02
+##   [73]  2.512951e-02  2.373525e-02  4.632754e-02 -4.697625e-02
+##   [77]  6.029144e-02  1.085660e-02  7.191734e-03  5.974849e-02
+##   [81] -1.025476e-01 -4.080387e-02 -2.152893e-02  5.942968e-02
+##   [85]  4.922619e-02  4.224965e-02  7.482880e-03 -5.727215e-02
+##   [89]  3.272602e-02  6.482499e-02 -2.760672e-02 -5.541754e-02
+##   [93]  7.423852e-02  7.194477e-02  1.907989e-02 -5.919445e-02
+##   [97]  3.707987e-02 -1.562527e-02  7.136865e-02 -1.246971e-02
+##  [101] -3.778635e-02  1.224408e-02 -4.056262e-02 -3.403500e-02
+##  [105]  5.422896e-02  4.789613e-02  1.784780e-02 -1.619623e-02
+##  [109] -3.559872e-02 -2.693767e-02 -5.152873e-02 -5.324142e-02
+##  [113]  6.908174e-02 -8.814116e-02 -3.485394e-02  1.025265e-01
+##  [117]  2.644754e-02  6.165956e-04  6.008164e-02 -4.288511e-02
+##  [121]  1.364731e-02  9.867936e-02 -2.704754e-02 -2.039473e-02
+##  [125]  3.013514e-02 -6.827036e-02 -5.900648e-02  2.820554e-02
+##  [129] -1.053671e-02 -1.782321e-02 -4.946449e-02  1.154124e-03
+##  [133] -8.295208e-03 -4.151458e-02 -2.740330e-02  1.019257e-02
+##  [137] -2.407355e-02  4.116725e-02  1.302892e-02  1.173141e-01
+##  [141]  6.602798e-02 -3.156954e-02 -6.819912e-02 -6.821726e-02
+##  [145] -6.455236e-02  3.684352e-02  7.377522e-02  2.115245e-03
+##  [149] -1.946249e-02  3.530667e-02 -2.795067e-02  5.087936e-02
+##  [153]  2.714774e-02  5.337553e-02 -7.798371e-02 -5.738484e-03
+##  [157] -4.541263e-02  1.816586e-02  9.620625e-03 -5.313084e-02
+##  [161] -8.450390e-02  6.306526e-02  9.161451e-03  2.408369e-02
+##  [165] -1.548454e-01 -6.643597e-03  4.776808e-02  4.226797e-02
+##  [169] -2.666397e-02  3.954542e-02 -3.698905e-02  3.097473e-02
+##  [173] -3.374859e-02  4.226300e-02  6.978908e-02 -3.665110e-02
+##  [177]  6.627909e-02 -3.626800e-02  1.686007e-02  4.491823e-02
+##  [181] -6.616963e-02 -2.546947e-02  9.023842e-02  2.032054e-02
+##  [185]  6.134651e-04  9.199326e-02  7.240100e-02 -5.450430e-02
+##  [189] -9.502579e-02  5.813932e-02 -6.891163e-02 -2.043821e-02
+##  [193] -1.385812e-02 -1.045044e-02  7.003456e-02  3.223711e-02
+##  [197]  2.856576e-02 -4.937479e-03  2.173125e-02  9.872037e-03
+##  [201]  3.256732e-03 -1.503516e-02  2.245073e-02  5.789078e-02
+##  [205] -1.029141e-01  4.174170e-02 -9.043732e-03  3.019408e-02
+##  [209]  3.264270e-02 -2.866120e-02  1.063417e-02 -3.075637e-02
+##  [213] -4.122052e-02 -3.104049e-03 -1.967460e-02  6.611669e-02
+##  [217]  4.908504e-02 -1.105472e-01 -1.692686e-02  3.498451e-02
+##  [221] -3.943161e-02 -8.398114e-03 -5.836252e-02 -8.543677e-02
+##  [225]  9.788675e-02  3.541828e-02 -1.461091e-02 -1.415817e-02
+##  [229]  6.689099e-02 -1.200842e-01  4.858746e-02  1.796705e-02
+##  [233] -9.105800e-02  3.735204e-02 -6.294142e-02  1.367228e-02
+##  [237]  2.624269e-02 -8.002080e-02  8.825668e-02  1.412692e-02
+##  [241] -3.987478e-02  6.117375e-03  3.548144e-02 -5.016981e-02
+##  [245] -7.114853e-02  9.748283e-03 -3.747569e-02 -9.530083e-03
+##  [249] -1.500032e-01  4.817133e-02  7.690542e-02 -2.004424e-02
+##  [253] -5.981075e-02  6.443837e-02  1.243485e-03 -1.332653e-02
+##  [257]  4.377152e-02 -2.099182e-03  2.345215e-02 -1.445967e-02
+##  [261]  6.299214e-02  1.483716e-02 -1.744649e-02 -4.973875e-02
+##  [265]  9.585057e-03 -5.700776e-02  3.154558e-02 -5.801420e-02
+##  [269] -1.978552e-03  5.185576e-02 -1.734077e-02 -3.843721e-02
+##  [273]  1.408638e-02  1.484004e-02  5.159409e-02  7.416381e-02
+##  [277] -3.216546e-02 -1.147628e-01 -1.158302e-01 -8.187008e-02
+##  [281] -8.200436e-03 -1.142895e-01 -2.984139e-02 -4.879000e-02
+##  [285] -1.499207e-02 -9.405026e-02  6.968909e-02  1.803330e-02
+##  [289]  6.914633e-02 -2.799776e-02 -3.341774e-02  1.083312e-02
+##  [293]  4.219372e-02  4.467398e-03  5.810411e-02  7.167508e-02
+##  [297]  3.029227e-03 -1.013703e-01  2.556567e-02 -4.404384e-02
+##  [301]  1.918946e-02 -4.820150e-02 -3.817961e-02 -8.220291e-02
+##  [305] -3.656165e-02  3.822310e-02 -2.940324e-02  2.584520e-02
+##  [309] -7.776742e-02 -8.364290e-03 -9.974290e-03 -8.267973e-02
+##  [313] -6.467562e-02 -2.299486e-02 -2.903132e-02  7.827688e-02
+##  [317]  3.688357e-02  1.587516e-02  3.662430e-02  9.954561e-02
+##  [321] -8.089697e-03 -5.587728e-02 -5.553144e-02  1.156866e-02
+##  [325]  9.996269e-02 -5.881376e-02  6.676215e-02 -3.182591e-02
+##  [329] -3.996476e-02  2.972313e-02  3.043249e-02  1.146981e-01
+##  [333]  5.236464e-02 -2.883900e-02  3.824652e-02 -2.349898e-02
+##  [337]  6.186686e-02 -5.449463e-03  1.591973e-01  6.391118e-02
+##  [341] -1.879868e-02 -4.486428e-03 -7.416139e-03 -4.183481e-02
+##  [345]  2.388842e-02 -9.076540e-02  1.787987e-02 -1.406936e-02
+##  [349]  4.446292e-02  4.285147e-02 -4.147073e-02 -5.654956e-02
+##  [353]  2.915128e-02 -1.834098e-02  4.123550e-02  8.156489e-02
+##  [357] -1.643723e-02  3.120520e-03 -8.003800e-03 -2.166436e-02
+##  [361] -4.012265e-02 -9.398754e-03 -2.428169e-02 -6.787010e-02
+##  [365]  4.487077e-02  3.411053e-02  1.587592e-02  1.257507e-02
+##  [369]  2.356942e-03 -2.240328e-02 -4.360626e-04  7.230531e-02
+##  [373]  5.449742e-02 -5.374510e-02 -5.743502e-02  7.307079e-02
+##  [377] -6.391876e-02  1.100372e-02  2.692033e-02 -1.011727e-02
+##  [381]  9.415943e-03 -1.152399e-03 -3.592818e-02  6.423762e-02
+##  [385]  1.714230e-02  1.021348e-02  8.535268e-02 -2.753158e-02
+##  [389]  9.301477e-02 -1.196165e-02 -7.174629e-02  7.492858e-05
+##  [393]  2.090388e-02  2.799172e-02  1.947715e-02 -1.681668e-02
+##  [397] -3.378906e-03  3.885840e-02  1.924247e-02 -3.447805e-02
+##  [401] -6.937696e-02  2.315144e-02 -4.412343e-02 -7.520541e-02
+##  [405] -7.971178e-02  9.915623e-02 -2.905298e-02  1.000305e-01
+##  [409]  1.495847e-02  8.558007e-02  2.015101e-02  5.195485e-02
+##  [413] -7.843770e-02 -6.317518e-02 -1.119553e-02 -7.181177e-02
+##  [417]  1.517660e-02 -7.315308e-05  4.206635e-02 -4.028477e-03
+##  [421]  8.679852e-03 -1.908776e-02 -2.317912e-02  6.091239e-03
+##  [425]  4.226609e-02 -6.908561e-02 -1.017450e-03  2.743403e-02
+##  [429]  2.615261e-02 -6.118377e-02  5.301048e-02 -9.582710e-03
+##  [433]  6.365691e-03 -1.519664e-02 -1.378682e-02 -1.288049e-02
+##  [437]  2.229373e-02  7.742336e-02 -2.768679e-02  4.332919e-02
+##  [441]  1.166391e-02 -1.185638e-02 -3.875065e-02  2.602073e-02
+##  [445] -3.238798e-02 -5.134700e-02 -8.472793e-03  1.827447e-02
+##  [449]  5.446151e-02  7.610430e-02  1.973435e-02 -3.408139e-02
+##  [453]  3.035306e-02 -9.256289e-02 -5.572363e-02  2.441864e-02
+##  [457]  8.078151e-03 -5.429680e-02 -7.223120e-02 -1.471725e-02
+##  [461] -2.293800e-02 -1.909126e-02 -6.532957e-02 -3.028842e-02
+##  [465] -3.058882e-03  1.215958e-02  2.614330e-02  8.656381e-04
+##  [469]  1.501294e-02 -3.985931e-02  3.245612e-02 -3.096081e-02
+##  [473]  2.726948e-02  7.951562e-03  3.486780e-02  4.369344e-02
+##  [477] -7.310515e-02 -3.281919e-03  3.912304e-02 -5.629836e-02
+##  [481]  7.254291e-03 -2.790838e-03  4.102331e-02 -3.460400e-02
+##  [485] -5.173011e-02  7.646189e-02 -6.678786e-02 -2.895566e-02
+##  [489]  2.650657e-02 -3.188959e-02 -4.061089e-02  1.806153e-02
+##  [493]  8.908306e-03 -2.309814e-02  2.060735e-02  7.103632e-02
+##  [497]  4.669951e-02  5.314572e-02 -5.118678e-04  3.664431e-02
+##  [501] -7.105887e-02  2.675997e-02 -1.530906e-02 -1.447409e-02
+##  [505]  2.977837e-02  4.758480e-02 -6.799977e-02 -5.163296e-02
+##  [509] -5.258681e-02  3.112745e-02  6.749628e-04  2.403390e-02
+##  [513] -6.049796e-02  4.233211e-02 -1.413070e-02 -1.094933e-01
+##  [517]  2.791129e-02  2.344209e-02  3.224825e-02  4.179278e-02
+##  [521]  4.100257e-02  6.778509e-02  2.779217e-02  1.244763e-02
+##  [525]  4.023534e-02 -1.261030e-02  1.277966e-02  4.783084e-02
+##  [529]  6.124366e-03  6.117726e-03  9.117541e-02  2.322866e-02
+##  [533]  2.637141e-02 -5.750818e-02 -1.845975e-02 -2.911202e-02
+##  [537] -1.382148e-02  3.154432e-03 -8.855155e-03 -1.955739e-02
+##  [541]  4.279043e-02 -2.463571e-02 -4.113983e-02  1.007009e-01
+##  [545] -4.691312e-02  1.151802e-02  7.930014e-02  9.235669e-02
+##  [549]  2.469565e-02  3.487368e-02  3.936098e-02 -5.219464e-02
+##  [553] -1.526472e-02  8.556339e-02  3.495793e-02  6.583227e-02
+##  [557]  2.777257e-02  4.265143e-02 -3.743504e-02  3.243581e-02
+##  [561] -5.682980e-02 -7.753026e-03  2.943265e-02 -9.205584e-02
+##  [565]  8.223779e-02 -4.419118e-02  5.147019e-02  1.202512e-02
+##  [569]  6.757257e-02 -8.415245e-02 -2.795503e-02 -4.134277e-02
+##  [573]  7.005167e-03 -3.600639e-02 -7.733943e-02 -7.424163e-02
+##  [577]  7.318296e-02 -3.928520e-03  6.373454e-02 -5.620835e-02
+##  [581] -1.844315e-02 -2.228004e-02  4.925988e-02 -2.172589e-02
+##  [585]  2.890361e-02 -4.047606e-02 -1.568343e-03  9.248485e-03
+##  [589] -3.718818e-03  3.767166e-02 -8.227068e-03 -3.807851e-02
+##  [593] -6.098294e-02  3.436017e-02  5.840278e-02  2.024172e-02
+##  [597]  2.918479e-02 -3.151554e-02  4.856658e-03 -2.356351e-02
+##  [601] -7.354415e-02 -1.484538e-02 -1.800910e-02  4.738508e-03
+##  [605]  7.713954e-03  4.256995e-02  8.156273e-02 -4.289727e-02
+##  [609] -4.778810e-03  2.705454e-02  6.687597e-02  4.744289e-03
+##  [613] -9.476267e-02  1.057667e-01 -4.517441e-02  7.009831e-02
+##  [617] -9.327082e-02  3.454757e-02  5.844888e-02  6.362320e-02
+##  [621] -2.260421e-02  3.234076e-02 -7.909539e-02  1.021368e-01
+##  [625] -4.405015e-02 -1.417044e-01  3.194032e-03  2.469662e-02
+##  [629]  1.048681e-02 -1.556560e-02 -2.952428e-02 -1.436929e-02
+##  [633] -1.027218e-01  7.638777e-02 -4.091957e-02 -2.592356e-02
+##  [637] -2.141485e-02  2.614380e-03  1.574502e-02 -1.072106e-02
+##  [641]  1.913977e-02 -6.369487e-02  1.744468e-02  2.534910e-02
+##  [645] -8.544362e-02 -5.432180e-02 -8.750142e-02  2.296344e-02
+##  [649]  5.753423e-03  2.924634e-02 -9.211697e-02  4.931554e-02
+##  [653]  4.651188e-02 -1.978843e-02 -1.538260e-03 -1.853961e-02
+##  [657] -5.099279e-02  1.181138e-02 -6.868375e-02 -5.991490e-02
+##  [661]  1.112159e-02  3.345129e-03  5.609109e-02 -8.114126e-02
+##  [665]  7.434216e-02  3.777721e-02 -7.975698e-04  1.873004e-02
+##  [669]  6.562630e-02 -6.411313e-02 -1.643137e-03 -2.449387e-02
+##  [673]  5.762382e-03 -8.639296e-02 -6.073321e-02  2.011628e-02
+##  [677]  1.032319e-02  5.434791e-02  4.716792e-02 -8.607692e-03
+##  [681]  4.410814e-02 -3.106224e-02  8.262602e-02 -1.647116e-02
+##  [685]  4.895023e-02  5.443597e-03  4.700132e-02 -6.709125e-02
+##  [689] -9.490099e-02  1.011576e-02  1.458816e-02 -1.190567e-02
+##  [693] -4.407776e-02 -7.431123e-02  7.259333e-02 -4.824605e-02
+##  [697] -1.896236e-02  1.682272e-03  6.215577e-02  2.177223e-02
+##  [701] -1.504612e-02  3.520279e-02 -3.535524e-02 -1.279605e-03
+##  [705]  2.301477e-02 -5.082380e-02  5.390421e-02 -5.679364e-02
+##  [709]  7.048661e-02 -6.904129e-03 -9.465840e-02 -1.315228e-02
+##  [713]  3.733703e-02  1.075363e-01 -7.275541e-02 -9.774059e-02
+##  [717] -7.755560e-02 -3.908305e-02  6.218266e-03 -1.193033e-02
+##  [721] -2.805321e-02 -9.529997e-03 -8.343595e-02 -5.794779e-02
+##  [725]  4.294360e-02 -6.299429e-02  5.742639e-02 -6.747576e-02
+##  [729]  2.134773e-02 -3.096880e-02  2.582031e-02  1.864137e-02
+##  [733]  6.839538e-02  1.738316e-02 -1.369034e-02  3.262015e-03
+##  [737] -7.451187e-02  1.782698e-02 -4.194593e-02 -8.748380e-03
+##  [741]  1.574012e-02  6.089832e-03  5.944006e-02  4.581590e-02
+##  [745] -4.684681e-02 -8.253900e-03 -4.922132e-02  7.610463e-02
+##  [749] -1.127164e-02  1.019571e-02 -5.767885e-02 -4.451090e-02
+##  [753]  2.435998e-02 -5.316534e-02 -2.804661e-02  5.889348e-03
+##  [757]  5.423066e-02 -5.168929e-03  1.546382e-03  7.803494e-02
+##  [761]  8.263236e-02 -4.161524e-02 -3.486015e-02  3.568333e-02
+##  [765] -2.697322e-02  2.712149e-02 -1.480571e-02 -4.208736e-02
+##  [769]  1.080657e-02  8.115789e-03  8.397323e-02 -4.320497e-02
+##  [773]  6.145758e-03 -8.895523e-02 -8.461699e-02 -1.314891e-02
+##  [777]  1.424450e-02  4.214864e-02 -3.717487e-02 -1.350132e-02
+##  [781] -4.235579e-02 -3.433555e-02 -2.084677e-02 -7.222397e-02
+##  [785]  9.742859e-03 -2.156391e-02  3.386535e-02  7.611466e-02
+##  [789] -6.368662e-02  2.724862e-02  6.053067e-02 -2.830312e-02
+##  [793] -3.994826e-02 -1.536301e-02  2.412903e-02  4.544373e-03
+##  [797] -2.922683e-02  7.254099e-03 -9.772413e-02  1.194755e-02
+##  [801] -3.169346e-02  1.270144e-02  4.954627e-02  1.467231e-02
+##  [805] -2.618122e-02 -5.937458e-02  4.500216e-02 -1.181694e-02
+##  [809]  1.740297e-02 -6.768523e-02 -1.024630e-02 -2.421514e-02
+##  [813]  7.062953e-02  4.013912e-02 -5.613706e-03  1.705811e-02
+##  [817]  6.784120e-02  3.774006e-02 -6.436945e-02 -1.921977e-02
+##  [821] -8.377852e-03 -2.519362e-02 -5.571805e-02 -4.991397e-02
+##  [825]  9.533254e-03 -1.862075e-02  7.102526e-02  4.359353e-03
+##  [829]  9.067814e-03  1.989107e-02 -3.313324e-02  3.138201e-02
+##  [833]  2.490256e-02  7.489818e-03 -6.106392e-02  1.552543e-02
+##  [837]  1.689433e-02 -2.254002e-02  1.635553e-02  8.425814e-02
+##  [841]  1.764418e-02  2.817322e-02  3.931457e-02 -1.284456e-02
+##  [845]  2.556050e-02 -4.893283e-03  3.414871e-02  5.462915e-02
+##  [849]  4.889736e-03 -5.071168e-04  5.484175e-02 -2.841340e-02
+##  [853]  3.517202e-02 -3.615368e-02 -7.897578e-02  3.988908e-03
+##  [857] -7.913116e-03 -3.116882e-03  3.160620e-02 -2.281823e-02
+##  [861]  1.011607e-02  2.214136e-02  4.320075e-02  6.083752e-04
+##  [865] -1.676582e-02 -4.357610e-02  7.366043e-03 -1.315128e-02
+##  [869] -5.310706e-02 -7.298587e-02 -3.736515e-02  4.891623e-02
+##  [873]  2.855541e-02  3.638145e-02  8.231885e-03 -2.596680e-02
+##  [877]  6.096193e-03  3.620469e-02  2.127834e-03 -1.445401e-02
+##  [881] -6.618611e-02  1.628898e-03  2.329624e-02 -7.336251e-02
+##  [885] -2.062637e-02 -2.655266e-02 -5.317070e-02 -7.916680e-03
+##  [889]  7.294877e-04 -7.218330e-02  4.322463e-02 -1.120693e-02
+##  [893]  3.596822e-03 -1.469815e-02  7.376818e-02  6.311358e-04
+##  [897]  4.061371e-02 -3.991844e-03 -7.296229e-02 -3.367098e-02
+##  [901]  2.354251e-02  4.477596e-03 -4.198923e-02  1.498430e-02
+##  [905]  4.209993e-02  9.896553e-03  3.353744e-02  3.611781e-02
+##  [909]  3.961129e-02 -2.548232e-02 -5.241832e-02 -2.224885e-02
+##  [913]  1.788480e-01  1.069651e-02 -8.950793e-03 -1.404300e-03
+##  [917]  1.035642e-02  4.550054e-02 -6.140284e-03 -6.205427e-02
+##  [921] -2.551292e-02  2.640194e-02  8.676347e-02  8.378005e-02
+##  [925] -2.990658e-02  4.782552e-02  8.006574e-02 -3.382010e-02
+##  [929] -2.031875e-02  2.457452e-02 -2.247665e-02  6.023419e-02
+##  [933] -3.483200e-03  2.406632e-02  1.397401e-02 -3.451416e-02
+##  [937]  2.267964e-02  3.350939e-03 -1.071234e-02 -9.829413e-02
+##  [941] -1.955482e-03 -2.013145e-03 -8.706657e-04 -2.523702e-03
+##  [945] -2.520633e-02 -3.496252e-02  2.864105e-02 -2.860760e-02
+##  [949]  1.546993e-02  6.091867e-03  1.510105e-03 -5.196484e-02
+##  [953] -8.571251e-03 -3.394887e-02 -1.062577e-02  6.034924e-02
+##  [957] -6.188957e-03  1.126726e-03 -4.526295e-02 -1.036924e-01
+##  [961]  2.812455e-02  1.358384e-02 -6.602289e-03 -7.258979e-02
+##  [965] -1.354160e-02  1.219458e-02 -2.960578e-02 -2.545160e-02
+##  [969] -7.879027e-02 -1.289937e-02  2.702455e-02 -4.618516e-02
+##  [973]  9.359574e-03 -1.455822e-03  4.678889e-04  5.263364e-02
+##  [977]  2.590435e-02  7.947492e-02 -4.371030e-02  7.882109e-02
+##  [981]  5.234573e-02  3.570999e-02 -4.295333e-02  1.058983e-01
+##  [985]  3.460830e-02 -5.391542e-03 -6.091684e-02 -3.450463e-02
+##  [989]  2.963318e-02 -7.738346e-02 -2.662782e-02  3.738374e-03
+##  [993] -5.975490e-03 -1.381784e-02 -2.424904e-02 -2.469138e-02
+##  [997]  5.146599e-02 -5.039609e-02  5.720964e-02  9.285537e-02</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getPVal</span>(slopes)</code></pre></div>
+<pre><code>## pL pU 
+##  1  0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotRanTest</span>(slopes)</code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="data:image/png;base64,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BAgQIECAgABqGyBAgAABAgQIEKiogABaUW4rI0CAAAECBAgQEEBtAwQIECBAgAABAhUVEEArym1lBAgQIECAAAECAqhtgAABAgQIECBAoKICAmhFua2MAAECBAgQIEBAALUNECBAgAABAgQIVFRAAK0ot5URIECAAAECBAgIoLYBAgQIECBAgACBigq0VHRtVkaAQE0JdGzpCcuWLQvXX3/9sPVua2sLLS0tYf369cPOE8swECBAgACBfgEBtF/CvwQIbCOwdkNXuPfee5O/bSZ6ggABAgQIFCkggBYJZzECjSDQ1BTCR94zIZz5gSklNfcn92wM3/y/wx8hLalwCxMgQIBAzQkIoDXXZSpMoLICLc1NYcL40k4Xb22ubJ2tjQABAgSyLVDau0q226Z2BAgQIECAAAECGRQQQDPYKapEgAABAgQIEKhnAQG0nntX2wgQIECAAAECGRQQQDPYKapEgAABAgQIEKhnAQG0nntX2wgQIECAAAECGRRwFXwGO0WVCBAYXmBLV29Y374hLF26dPiZCpwSb6A/b968MGaMz+IFkpmNAAECqQgIoKkwKoQAgUoJLHtpS1jx+uPh+OOPT2WVV199dTj22GNTKUshBAgQIFCYgABamJO5CBDIiEBPbwjveGtr+Nz/M7WkGm1o7w2nfXV1aG9vL6kcCxMgQIDA6AUE0NGbWYIAgSoLtI1rCru/bWxJtVi7saek5S1MgAABAsULOPGpeDtLEiBAgAABAgQIFCEggBaBZhECBAgQIECAAIHiBQTQ4u0sSYAAAQIECBAgUISAAFoEmkUIECBAgAABAgSKFxBAi7ezJAECBAgQIECAQBECAmgRaBYhQIAAAQIECBAoXkAALd7OkgQIECBAgAABAkUICKBFoFmEAAECBAgQIECgeAEBtHg7SxIgQIAAAQIECBQhIIAWgWYRAgQIECBAgACB4gUE0OLtLEmAAAECBAgQIFCEgABaBJpFCBAgQIAAAQIEihcQQIu3syQBAgQIECBAgEARAgJoEWgWIUCAAAECBAgQKF5AAC3ezpIECBAgQIAAAQJFCAigRaBZhAABAgQIECBAoHgBAbR4O0sSIECAAAECBAgUISCAFoFmEQIECBAgQIAAgeIFBNDi7SxJgAABAgQIECBQhIAAWgSaRQgQIECAAAECBIoXEECLt7MkAQIECBAgQIBA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X3qrG9P3cywxzIwbNy69QjNYUmxnHKZOnRp6e//4W4gZrGehVRo7dmyhs5qvzgXi67eW90GDuye+TuO+qF7aM7htgx/HPmtubm6IdsZ2T548uaBz0gcb1drj2J/xvaWQc+9rrW2D6xvbGYd8r9G4fbe1tfXNU533qa6ursFV3uZxXQXQ119/fZsG1soTMci0tLSEer8YJbZzxowZYe3ataG7u7tWumfYenZ2dg47zYTGEohverW8DxrcW7NmzQrx9JJ169YNfrruHsc38YkTJzZEO7fffvuwfv36UO/7rHjxZww+jdDOKVOm5N3n9PbODps3b+6bZ2NVXrsjHVBzG6aqdIuVEiBAgAABAgQaV0AAbdy+13ICBAgQIECAQFUEBNCqsFspAQIECBAgQKBxBQTQxu17LSdAgAABAgQIVEVAAK0Ku5USIECAAAECBBpXQABt3L7XcgIECBAgQIBAVQQE0KqwWykBAgQIECBAoHEFBNDG7XstJ0CAAAECBAhURUAArQq7lRIgQIAAAQIEGldAAG3cvtdyAgQIECBAgEBVBATQqrBbKQECBAgQIECgcQUE0Mbtey0nQIAAAQIECFRFQACtCruVEiBAgAABAgQaV0AAbdy+13ICBAgQIECAQFUEBNCqsFspAQIECBAgQKBxBQoOoEceeWTYsGHDNlLXXHNNOOmkk7Z53hMECBAgQIAAAQIEhhJoGerJ/ueWLFkSFi1alIzef//94bLLLgvjx4/vnxy6u7vDLbfcEnbdddeB5zwgQIAAAQIECBAgkE8gbwDdZZddwjnnnBM6OjrCli1bwm233Raam5sHymttbQ1vf/vbw6c//emB5zwgQIAAAQIECBAgkE8gbwCdMWNGWLx4cbL88ccfH6699towadKkfOWZRoAAAQIECBAgQCCvQN4AOnjJW2+9NTkS+sILLyT/Dp4WQ+kOO+ww+CmPCRAgQIAAAQIECAwpUHAAvemmm8Kpp54a3njjjW0K+pu/+Ztwww03bPO8JwgQIECAAAECBAhsLVBwAD399NPDBz/4wfCpT30qTJ8+PaccX8vncBghQIAAAQIECBDII1BQAF23bl147bXXwuWXXx623377PMWZRIAAAQIECBAgQCC/QEH3AZ0yZUqYO3duWLp0af7STCVAgAABAgQIECAwgkBBR0BjGZdcckk4++yzw0svvZSE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IECAAAECBOpHILPngNYPsZYQIECAAAECBAgMFhBAB2t4TIAAAQIECBAgUHYBAbTsxFZAgAABAgQIECAwWEAAHazhMQECBAgQIECAQNkFBNCyE1sBAQIECBAgQIDAYAEBdLCGxwQIECBAgAABAmUXEEDLTmwFBAgQIECAAAECgwUE0MEaHhMgQIAAAQIECJRdQAAtO7EVECBAgAABAgQIDBYQQAdreEyAAAECBAgQIFB2AQG07MRWQIAAAQIECBAgMFhAAB2s4TEBAgQIECBAgEDZBVrKvoYKrqClpXab09TUlEjVchsK6er29vbw2GOPhenTp4d6b2tPT09obm4O/X1biE8tzrNy5crQ0dGR9Gkt1n80de7u7q777TZ6PPPMM2HcuHFh4sSJo+GpuXnHjBkT4uu03vdFcbuN+92pU6eGsWPH1lw/jbbCcZ9b7326du3a8Morr4SZM2cOy3PkkZ1hl116q2YR3//yDU29fUO+GUwjkKbA/fffHz75yU+G//iP/whz585Ns2hlVUng0ksvDf/5n/8ZFi1aVKUaWG3aAkceeWQ49NBDwz/90z+lXbTyqiDw3HPPhaOPPjp873vfCwcffHAVamCVaQtcc8014fLLLw+PP/542kVXrDxfwVeM2ooIECBAgAABAgSigABqOyBAgAABAgQIEKioQPPn+4aKrtHKGlognpszbdq0cOCBB4bx48c3tEW9ND6eRxdPp5g3b169NKnh2xHP3dpnn33C2972toa3qAeAuN+dMGFCst+N54Eaal8g7nd32mmnsP/++9dsY5wDWrNdp+IECBAgQIAAgdoU8BV8bfabWhMgQIAAAQIEalZAAK3Zrqudii9btizceeedYdWqVSNW+oknngjxik1D9gTirZYWL14cHnjggbBly5ZhK1jofMMWYELFBEbTVxs2bEj6v2KVs6KiBOJ+9o477ghxv5tvePrpp8M999wTNm/enG820zIgUMh7aLzF4S9/+cuwdOnS0NXVlYFaj1wF54CObGSOEgSuvPLKcMstt4TOzs7wjW98I7z73e9O7kU3VJF/+MMfwllnnRX+5E/+JOy6665DzeK5KgnEN6mTTz45bNy4MQkh8Y0r3tZl63ucFjpflZphtYMERtNX8c3ts5/9bHjyySdDvEWTIZsCDz30ULIP3W677cK3v/3t5Dz73XbbbZvKnnPO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" /><!-- --></p>
 </div>
     </section>
   </div>

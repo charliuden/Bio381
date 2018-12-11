@@ -2,7 +2,10 @@
 title: 'Homeworrk #11'
 author: "cuden"
 date: "11/7/2018"
-output: html_document
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
 ---
 
 ```{r setup, include=FALSE}
@@ -15,7 +18,7 @@ In this exercise, I encourage you to improve your graphics with elements that we
 
 ###Installing patchwork:
 
-```{r setup, echo=TRUE}
+```{r, echo=TRUE}
 #install.packages("devtools")
 #devtools::install_github("thomasp85/patchwork")
 #install.packages("patchwork")
@@ -31,9 +34,10 @@ library(ggplot2)
 #install.packages("colorspace", repos = "http://R-Forge.R-project.org")
 #devtools::install_github("wilkelab/cowplot")
 #devtools::install_github("clauswilke/colorblindr")
-library(colorblindr) 
+#library(colorblindr) 
 library(colorspace)
 library(cowplot)
+library(wesanderson)
 
 # testing viridis
 #fig <- ggplot(iris, aes(Sepal.Length, fill = Species)) + geom_density(alpha = 0.7)
@@ -42,7 +46,7 @@ library(cowplot)
 
 ###My Data:
 
-For today's assignment I will be using data on stage transitions of centaurea (knapweed). Each row is a population of centaurea. Eventually, I will use this data to build population matrices, but right now I am just going to use ggplot to plot to peek at the data. 
+For today's assignment I will be using data on life stage transitions of centaurea (knapweed). Each row is a population of centaurea. Eventually, I will use this data to build population matrices, but right now I am just going to use ggplot to peek at the data. 
 
 Variables:
 g = germination rate (September - July)
@@ -61,19 +65,14 @@ C <- read.table("CentaureaVitalRates.csv",header=TRUE,sep=",", stringsAsFactors=
 cleanC <- C[complete.cases(C[1:10]),]
 ```
 
-To start, I found a significant relationshipt between species and survival of adult flowering plants (sf):
+###Plot 1:
+
+To start, lets look at the relationship between species (spotted or meadow knapweed) and survival of adult flowering plants (sf), then plot it:
 
 ```{r, echo=TRUE}
 head(cleanC)
 ANOmodel <- aov(sf~Species, data=cleanC)
 summary(ANOmodel)
-```
-
-###Plot 1:
-
-So, let's plot this relationship: population loaction (Location) and survival of adult flowering plants (sf).
-
-```{r, echo=TRUE}
 p1 <- ggplot(data=cleanC, 
              aes(x=Species, y=sf, 
                  fill= I("greenyellow"))) +
@@ -84,9 +83,10 @@ p1 <- ggplot(data=cleanC,
 print(p1)
 ```
 
+
 ###Plot 2:
 
-Another variable that may be related to survival is location. This also shows a significant relationship with survival. Again, I am going make a box plot so we can "see" it. 
+Another variable that may be related to survival is location. This also shows a significant relationship with survival.
 
 ```{r, echo=TRUE}
 ANOmodel <- aov(sf~Location, data=cleanC)
@@ -161,7 +161,9 @@ print(p6)
 ```
 
 Again, becuase both species weren't measured at each locaion, plotting the data this way is less helpful than having separate plots for each species. So, I'm going to focus on making plots 4 and 5 look pretty. 
+
 ```{r, echo=TRUE}
+library(ggthemes)
 p1 <- p1 + theme_solarized(base_size=7, base_family="Courier")
 print(p1)
 p2 <- p2 + theme_solarized(base_size=7, base_family="Courier") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -182,12 +184,5 @@ p4 + p5
 p5 + p4 + plot_layout(ncol=2, widths=c(3,4))
 ```
 
-From plots 4 and 5, I would predict that 
 
-
-
-```{r, echo=TRUE}
-
-
-```
 

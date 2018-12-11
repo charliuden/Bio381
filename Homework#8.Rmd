@@ -132,12 +132,14 @@ pValue() #works!
 # OUTPUTS: vector of p values
 #------------------------------
 repeatedPValue <- function(tableName=simData()) {
-  x <- c(1:100)
-  y <- paste(x,pValue(tableName=tableName),0)
-  return(y)
+  m <- matrix(data=rep(NA, times=100), ncol=1) #matrix to put p values in
+  colnames(m) <- "pValue"
+  for (i in 1:nrow(m)){
+    m[i,] <- pValue(tableName=simData())
+    }
+  return(m)
 }
 #-------------------------------
-repeatedPValue() #works!
 
 #STRUCTURED PROGRAMMING
 
@@ -157,11 +159,17 @@ nSD <- c(5, 5, 5, 5, 5, 5)
 
 #-----------------------------------------------
 # Program body 
-floweringTimes <- simData(numGroup=6,groupNames=nNames,sampleSize=nSize,mean=nMean,sd=nSD)
-pValue(tableName=floweringTimes)
-z <- repeatedPValue(tableName=floweringTimes)
-head(z)
-qplot(z,
-      geom="histogram")
-hist(z)
+# plot p values in histogram:
+
+pvals <- repeatedPValue(tableName=simData(numGroup=6,groupNames=nNames,sampleSize=nSize,mean=nMean,sd=nSD))
+
+head(pvals)
+pvals <- data.frame(pvals)
+
+p <- ggplot(data=pvals, 
+             mapping=aes(x=pValue, 
+                         fill=I("royalblue"), 
+                         color=I("black"))) +
+  geom_histogram()
+print(p)
 ```

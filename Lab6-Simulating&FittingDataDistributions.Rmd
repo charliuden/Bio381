@@ -12,7 +12,7 @@ output:
 
 # 1.
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 library(ggplot2) # for graphics
 library(MASS) # for maximum likelihood estimation
 
@@ -32,7 +32,7 @@ summary(z$myVar)
 ###Plot Histogram
 Plot a histogram of the data, using a modification of the code from lecture. Here we are switching from qplot to ggplot for more graphics options. We are also rescaling the y axis of the histogram from counts to density, so that the area under the histogram equals 1.0.
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 p1 <- ggplot(data=z, aes(x=myVar, y=..density..)) +
   geom_histogram(color="grey60",fill="cornsilk",size=0.2) 
 print(p1)
@@ -41,16 +41,16 @@ print(p1)
 ###Add empirical density curve
 Now modify the code to add in a kernel density plot of the data. This is an empirical curve that is fitted to the data. It does not assume any particular probability distribution, but it smooths out the shape of the histogram:
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 p1 <-  p1 +  geom_density(linetype="dotted",size=0.75)
 print(p1)
 ```
 
 
-###Get a maximum lilihood parameter for normal
+###Get a maximum liklihood parameter for normal
 Next, fit a normal distribution to your data and grab the maximum likelihood estimators of the two parameters of the normal, the mean and the variance:
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 normPars <- fitdistr(z$myVar,"normal")
 print(normPars)
 str(normPars)
@@ -60,7 +60,7 @@ normPars$estimate["mean"] # note structure of getting a named attribute
 ###Plot normal probability density
 Now let’s call the dnorm function inside ggplot’s stat_function to generate the probability density for the normal distribution. Read about  stat_function in the help system to see how you can use this to add a smooth function to any ggplot. Note that we first get the maximum likelihood parameters for a normal distribution fitted to thse data by calling fitdistr. Then we pass those parameters (meanML and sdML to  stat_function:
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 meanML <- normPars$estimate["mean"]
 sdML <- normPars$estimate["sd"]
 
@@ -75,7 +75,7 @@ Notice that the best-fitting normal distribution (red curve) for these data actu
 ###Plot exponential probability density
 Now let’s use the same template and add in the curve for the exponential: 
  
-```{r setup, include=FALSE}
+```{r, include=FALSE}
  expoPars <- fitdistr(z$myVar,"exponential")
 rateML <- expoPars$estimate["rate"]
 
@@ -87,14 +87,14 @@ stat2 <- stat_function(aes(x = xval, y = ..y..), fun = dexp, colour="blue", n = 
 ###Plot uniform probability density
 For the uniform, we don’t need to use fitdistr because the maximum likelihood estimators of the two parameters are just the minimum and the maximum of the data:
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 stat3 <- stat_function(aes(x = xval, y = ..y..), fun = dunif, colour="darkgreen", n = length(z$myVar), args = list(min=min(z$myVar), max=max(z$myVar)))
  p1 + stat + stat2 + stat3
 ```
 
 ###Plot gamma probability density
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 gammaPars <- fitdistr(z$myVar,"gamma")
 shapeML <- gammaPars$estimate["shape"]
 rateML <- gammaPars$estimate["rate"]
@@ -106,7 +106,7 @@ stat4 <- stat_function(aes(x = xval, y = ..y..), fun = dgamma, colour="brown", n
 ###Plot beta probability density
 This one has to be shown in its own plot because the raw data must be rescaled so they are between 0 and 1, and then they can be compared to the beta.
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 pSpecial <- ggplot(data=z, aes(x=myVar/(max(myVar + 0.1)), y=..density..)) +
   geom_histogram(color="grey60",fill="cornsilk",size=0.2) + 
   xlim(c(0,1)) +
@@ -138,8 +138,10 @@ This data set conatins various brac measurements on the centaurea seed head. For
 #> file.choose()
 #[1] "/Users/charlotteuden/Desktop/First_Term/INV_ECO/invasion_ecology/CentaureaCapitulatData.csv"
 
-z <- read.csv("/Users/charlotteuden/Desktop/First_Term/INV_ECO/invasion_ecology/CentaureaCapitulatData.csv", sep=",", header=TRUE, stringsAsFactors = FALSE) 
+z <- read.csv("CentaureaCapitulatData.csv", sep=",", header=TRUE, stringsAsFactors = FALSE) 
 head(z)
+z <- z[complete.cases(z[3:12]),] #take out NA's
+
 
 p1 <- ggplot(data=z, aes(x=Brac_Len, y=..density..)) +
   geom_histogram(color="grey60",fill="cornsilk",size=0.2) 
@@ -149,7 +151,7 @@ print(p1)
 
 ###Add empirical density curve
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 p1 <-  p1 +  geom_density(linetype="dotted",size=0.75) #"smooths out data" 
 print(p1)
 ```
@@ -158,7 +160,7 @@ print(p1)
 ###Get a maximum lilihood parameter for normal
 Next, fit a normal distribution to your data and grab the maximum likelihood estimators of the two parameters of the normal, the mean and the variance:
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 normPars <- fitdistr(z$Brac_Len,"normal") 
 print(normPars)
 str(normPars)
@@ -168,13 +170,13 @@ normPars$estimate["mean"] # note structure of getting a named attribute
 ###Plot normal probability density
 Now let’s call the dnorm function inside ggplot’s stat_function to generate the probability density for the normal distribution. Read about  stat_function in the help system to see how you can use this to add a smooth function to any ggplot. Note that we first get the maximum likelihood parameters for a normal distribution fitted to thse data by calling fitdistr. Then we pass those parameters (meanML and sdML to  stat_function:
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 meanML <- normPars$estimate["mean"]
 sdML <- normPars$estimate["sd"]
 
-xval <- seq(0,max(z$uptake),len=length(z$uptake))
+xval <- seq(0,max(z$Brac_Len),len=length(z$Brac_Len))
 
- stat <- stat_function(aes(x = xval, y = ..y..), fun = dnorm, colour="red", n = length(z$myVar), args = list(mean = meanML, sd = sdML))
+stat <- stat_function(aes(x = xval, y = ..y..), fun = dnorm, colour="red", n = length(z$myVar), args = list(mean = meanML, sd = sdML))
  p1 + stat
 ```
  
@@ -182,11 +184,11 @@ xval <- seq(0,max(z$uptake),len=length(z$uptake))
 ###Plot exponential probability density
 Now let’s use the same template and add in the curve for the exponential: 
  
-```{r setup, include=FALSE}
- expoPars <- fitdistr(z$uptake,"exponential")
+```{r, include=FALSE}
+expoPars <- fitdistr(z$Brac_Len,"exponential")
 rateML <- expoPars$estimate["rate"]
 
-stat2 <- stat_function(aes(x = xval, y = ..y..), fun = dexp, colour="blue", n = length(z$uptake), args = list(rate=rateML))
+stat2 <- stat_function(aes(x = xval, y = ..y..), fun = dexp, colour="blue", n = length(z$Brac_Len), args = list(rate=rateML))
  p1 + stat + stat2
 ```
 
@@ -194,36 +196,36 @@ stat2 <- stat_function(aes(x = xval, y = ..y..), fun = dexp, colour="blue", n = 
 ###Plot uniform probability density
 For the uniform, we don’t need to use fitdistr because the maximum likelihood estimators of the two parameters are just the minimum and the maximum of the data:
 
-```{r setup, include=FALSE}
-stat3 <- stat_function(aes(x = xval, y = ..y..), fun = dunif, colour="darkgreen", n = length(z$uptake), args = list(min=min(z$uptake), max=max(z$uptake)))
+```{r, include=FALSE}
+stat3 <- stat_function(aes(x = xval, y = ..y..), fun = dunif, colour="darkgreen", n = length(z$Brac_Len), args = list(min=min(z$Brac_Len), max=max(z$Brac_Len)))
  p1 + stat + stat2 + stat3
 ```
 
 ###Plot gamma probability density
 
-```{r setup, include=FALSE}
-gammaPars <- fitdistr(z$uptake,"gamma")
+```{r, include=FALSE}
+gammaPars <- fitdistr(z$Brac_Len,"gamma")
 shapeML <- gammaPars$estimate["shape"]
 rateML <- gammaPars$estimate["rate"]
 
-stat4 <- stat_function(aes(x = xval, y = ..y..), fun = dgamma, colour="brown", n = length(z$uptake), args = list(shape=shapeML, rate=rateML))
+stat4 <- stat_function(aes(x = xval, y = ..y..), fun = dgamma, colour="brown", n = length(z$Brac_Len), args = list(shape=shapeML, rate=rateML))
  p1 + stat + stat2 + stat3 + stat4
 ```
  
 ###Plot beta probability density
 This one has to be shown in its own plot because the raw data must be rescaled so they are between 0 and 1, and then they can be compared to the beta.
 
-```{r setup, include=FALSE}
-pSpecial <- ggplot(data=z, aes(x=uptake/(max(uptake + 0.1)), y=..density..)) +
+```{r, include=FALSE}
+pSpecial <- ggplot(data=z, aes(x=Brac_Len/(max(Brac_Len + 0.1)), y=..density..)) +
   geom_histogram(color="grey60",fill="cornsilk",size=0.2) + 
   xlim(c(0,1)) +
   geom_density(size=0.75,linetype="dotted")
 
-betaPars <- fitdistr(x=z$uptake/max(z$uptake + 0.1),start=list(shape1=1,shape2=2),"beta")
+betaPars <- fitdistr(x=z$Brac_Len/max(z$Brac_Len + 0.1),start=list(shape1=1,shape2=2),"beta")
 shape1ML <- betaPars$estimate["shape1"]
 shape2ML <- betaPars$estimate["shape2"]
 
-statSpecial <- stat_function(aes(x = xval, y = ..y..), fun = dbeta, colour="orchid", n = length(z$uptake), args = list(shape1=shape1ML,shape2=shape2ML))
+statSpecial <- stat_function(aes(x = xval, y = ..y..), fun = dbeta, colour="orchid", n = length(z$Brac_Len), args = list(shape1=shape1ML,shape2=shape2ML))
 pSpecial + statSpecial
 ```
 
@@ -243,8 +245,9 @@ Try converting the iris data set into the long format, with a column called “t
 
 Once you have converted to the long format, calculate the average for each combination of species and trait.
 
-```{r,echo=TRUE}
+```{r, echo=TRUE}
 library(tidyr)
+library(dplyr)
 head(iris)
 
 irisLong <- iris %>%

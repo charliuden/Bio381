@@ -14,12 +14,12 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Presentation Goals
 
-The primary goal of this presentation is to learn how to make a presentation in \ LaTex. I have chosen the life history of Centaurea as my subject becasue I will be working with this species during the coming term. 
+The primary goal of this presentation is to learn how to make a presentation in \ LaTex. I have chosen the life history of \textit{Centaurea} as my subject becasue I will be working with this species during the coming term. \textit{Centaurea} is a genus of flowering plants introduced from Europe. In its introduced range (North America), it has become a successful competitor. 
 
-Questions: Will understanding the species' life history help us tackle its invasion? What stage of the Centaurea (an invasive plant species) life cycle is most vulnerable to biological control?  
+Questions: Will understanding \textit{Centaurea's} life history help us prevent contued spread of the species? What stage of the \textit{Centaurea} life cycle is most vulnerable to biological control?  
 
 
-## Stages in the Life Cycle of Centaurea
+## Stages in the Life Cycle of \textit{Centaurea}
 
 - \color{green} seed
 -  jeuvenile
@@ -37,9 +37,9 @@ Questions: Will understanding the species' life history help us tackle its invas
 
 ## Data Collection:
 
->- number that graduated to next life cycle
->- number that stayed in same stage of life cycle
->- number that reverted back to previous stayce
+>- number that transition to next life stage
+>- number that stayed in same stage 
+>- number that reverted back to previous stage
 >- number that died
 
 >- From this data, transitions from stage to stage will be calculated. 
@@ -47,9 +47,9 @@ Questions: Will understanding the species' life history help us tackle its invas
 ##Image with caption
 
 \begin{picture}(320,250)
- \put(50,90){\includegraphics[height=5cm]{maidenHairFern.jpg}}
+ \put(50,90){\includegraphics[height=5cm]{IMG_1783.JPG}}
  \put(00,70){\begin{minipage}[t]{1\linewidth}
- {Since I have never taken my own picture of Cenraurea, here is a picture I took of my favorite fern in Vermont: \textit{Adiantum} or Maidenhair Fern}
+ {Here is a picture I took of a flowering centaurea in the green house, right here on UVM's campus: \textit{Centaurea} or knapweed}
  \end{minipage}}
  \end{picture}
 
